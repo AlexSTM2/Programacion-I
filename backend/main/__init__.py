@@ -13,6 +13,9 @@ def create_app():
     load_dotenv()
     api.add_resource(resources.RecursoUsuario, "/usuario/<id>")
     api.add_resource(resources.RecursoUsuarios, "/usuarios" )
+    api.add_resource(resources.RecursoPoema, "/poema/<id>" )
+    api.add_resource(resources.RecursoPoemas, "/poemas" )
+    api.add_resource(resources.RecursoCalificacion, "/calificacion/<id>")
+    api.add_resource(resources.RecursoCalificaciones, "/calificaciones")
     api.init_app(app)
     return app
-
