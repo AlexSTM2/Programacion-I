@@ -3,6 +3,7 @@ import resource
 from flask import Flask
 from dotenv import load_dotenv
 from flask_restful import Api
+#Importo directorio de recursos
 import main.resources as resources
 from flask_sqlalchemy import SQLAlchemy
 api = Api()
