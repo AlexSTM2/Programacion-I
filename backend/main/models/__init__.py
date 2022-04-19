@@ -1,1 +1,1 @@
-from .Usuario import Usuario as UsuarioModel
+from .Usuario import Usuario as ModeloUsuario

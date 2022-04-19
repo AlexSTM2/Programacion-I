@@ -3,7 +3,7 @@ from .. import db
 
 class Usuario(db.Model):
 #Acà defino las columnas que van a formar a mi tabla de Usuarios, con todos 
-# os datos que necesito.
+#los datos que necesito.
 
     id = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(100), nullable = False)
@@ -20,6 +20,14 @@ class Usuario(db.Model):
             "id" : self.id ,
             "nombre" : str(self.nombre) ,
             "rol" : str(self.rol)
+        }
+        return usuario_json
+    
+    def to_json_short(self):
+        usuario_json = {
+            'id': self.id,
+            'nombre': str(self.nombre),
+
         }
         return usuario_json
     
