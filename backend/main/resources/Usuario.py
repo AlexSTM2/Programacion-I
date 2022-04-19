@@ -1,10 +1,7 @@
-import json
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
 from main.models import ModeloUsuario
-
-#USUARIOS = {1: {"Nombre: ": "Alexis", "Apellido: " : "Lino"}}
 
 class Usuario(Resource):
 
