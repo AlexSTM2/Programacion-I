@@ -12,14 +12,20 @@ class Usuario(db.Model):
     email = db.Column(db.String(100), nullable = False)
     def __repr__(self):
 
+<<<<<<< HEAD
+        return "<Usuario: %r %r >" % (self.nombre, self.rol, self.contraseña, self.id)
+=======
         return "<Usuario: %r %r >" % (self.nombre, self.rol, self.email)
+>>>>>>> 0fbd1743b49f545cf5be5afc769aacc12bd694c2
     
     def to_json(self):
 
         usuario_json = {
             "id" : self.id ,
             "nombre" : str(self.nombre) ,
-            "rol" : str(self.rol)
+            "rol" : str(self.rol),
+            "contraseña" : str(self.contraseña), 
+            "email" : str(self.email)
         }
         return usuario_json
     
@@ -38,6 +44,10 @@ class Usuario(db.Model):
         id = usuario_json.get("id")
         nombre = usuario_json.get("nombre")
         rol = usuario_json.get("rol")
+        contraseña = usuario_json.get("contraseña")
+        email = usuario_json.get("email")
         return Usuario(id = id,
                 nombre = nombre,
-                rol = rol)
+                rol = rol,
+                contraseña = contraseña,
+                email = email)
