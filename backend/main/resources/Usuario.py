@@ -1,43 +1,43 @@
+import json
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
+from .. import db
+from main.models import ModeloUsuario
 
-USUARIOS = {1: {"Nombre: ": "Alexis", "Apellido: " : "Lino"}}
+#USUARIOS = {1: {"Nombre: ": "Alexis", "Apellido: " : "Lino"}}
 
 class Usuario(Resource):
 
     def get(self, id):
-
-        if int(id) in USUARIOS:
-            return USUARIOS[int(id)]
-        else:
-            return '', 404
+        usuario = db.session.query(ModeloUsuario).get_or_404(id)
+        return usuario.to_json()
         
     def delete(self, id):
-        
-        if int(id) in USUARIOS:
-            del USUARIOS[int(id)]
-            return '', 204
-        else:
-            return '', 404
+        usuario =  db.session.query(ModeloUsuario).get_or_404(id)
+        db.session.delete(usuario)
+        db.session.commit()
+        return '', 204
 
     def put(self, id):
 
-        if int(id) in USUARIOS:
-            usuario = USUARIOS[int(id)]
-            data = request.get_json()
-            usuario.update(data)
-            return usuario, 201
-        else:
-            return '', 404
-    
+        usuario = db.session.query(ModeloUsuario).get_or_404(id)
+        data = request.get_json().items()
+        for key, value in data:
+            setattr(usuario, key, value)
+        db.session.add(usuario)
+        db.session.commit()
+        return usuario.to_json(), 201
+
 class Usuarios(Resource):
     #Obtener lista de recursos
     def get(self):
-        return USUARIOS
+        
+        usuarios = db.session.query(ModeloUsuario).all()
+        return jsonify([usuario.to_json_short() for usuario in usuarios])
+
     #Insertar recurso
     def post(self):
-        #Obtener datos de la solicitud
-        usuario = request.get_json()
-        id = int(max(USUARIOS.keys())) + 1
-        USUARIOS[id] = usuario
-        return USUARIOS[id], 201
+        usuario = ModeloUsuario.from_json(request.get-json())
+        db.session.add(usuario)
+        db.commit()
+        return usuario.to_json(), 201
