@@ -1,33 +1,44 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, jsonify
+from .. import db
+from main.models import ModeloCalificacion
 
-CALIFICACIONES = {1: {"Poema: ": "Poema 1", "Calificaciòn: " : "1"}, 2:{"Poema: ": "Poema 2", "Calificaciòn: ": "2"}}
 
 class Calificacion(Resource):
 
     def get(self, id):
 
-        if int(id) in CALIFICACIONES:
-            return CALIFICACIONES[int(id)]
-        else:
-            return '', 404
+        calificacion = db.session.query(ModeloCalificacion).get_or_404(id)
+        return calificacion.to_json()
         
     def delete(self, id):
+
+        calificacion = db.session.query(ModeloCalificacion).get_or_404(id)
+        db.session.delete(calificacion)
+        db.session.commit()
+        return '', 204
+#Este put no va, pero serìa programado de esta manera:
+    # def put(self,id):
+
+    #     calificacion = db.session.query(ModeloCalificacion).get_or_404(id)
+    #     data = request.get_json().items
+    #     for key, value in data:
+    #         setattr(calificacion, key, value)
         
-        if int(id) in CALIFICACIONES:
-            del CALIFICACIONES[int(id)]
-            return '', 204
-        else:
-            return '', 404
+    #     db.session.add(calificacion)
+    #     db.session.commit() 
+    #     return calificacion.to_json(), 201   
 
 class Calificaciones(Resource):
     #Obtener lista de recursos
     def get(self):
-        return CALIFICACIONES
+
+        calificaciones = db.session.query(ModeloCalificacion).all()
+        return jsonify([calificacion.to_json_short() for calificacion in calificaciones])
     #Insertar recurso
     def post(self):
-        #Obtener datos de la solicitud
-        calificacion = request.get_json()
-        id = int(max(CALIFICACIONES.keys())) + 1
-        CALIFICACIONES[id] = calificacion
-        return CALIFICACIONES[id], 201
+
+        calificacion = ModeloCalificacion.from_json(request.get_json())
+        db.session.add(calificacion)
+        db.session.commit()
+        return calificacion.to_json(), 201

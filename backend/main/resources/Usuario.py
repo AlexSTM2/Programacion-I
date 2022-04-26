@@ -3,10 +3,6 @@ from flask import request, jsonify
 from .. import db
 from main.models import ModeloUsuario
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0fbd1743b49f545cf5be5afc769aacc12bd694c2
 class Usuario(Resource):
 
     def get(self, id):

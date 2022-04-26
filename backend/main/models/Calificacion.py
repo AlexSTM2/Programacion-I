@@ -6,10 +6,10 @@ class Calificacion(db.Model):
 #los datos que necesito.
 
     id = db.Column(db.Integer, primary_key = True)
-    puntaje = db.Column(db.Integer(100), nullable = False)
+    puntaje = db.Column(db.Integer(), nullable = False)
     comentario = db.Column(db.String(100), nullable = True)
-    userid = db.Column(db.Integer(20), nullable = False)
-    poemaid = db.Column(db.Integer(20), nullable = False)
+    userid = db.Column(db.Integer(), nullable = False)
+    poemaid = db.Column(db.Integer(), nullable = False)
 
     def __repr__(self):
 
@@ -29,20 +29,22 @@ class Calificacion(db.Model):
     def to_json_short(self):
         calificacion_json = {
             'id': self.id,
-            'nombre': str(self.nombre),
-
+            'puntaje': str(self.puntaje),
+            'comentario' : str(self.comentario)
         }
-        return usuario_json
+        return calificacion_json
     
     @staticmethod
     #Vamos a convertir JSON a objeto
-    def from_json(usuario_json):
+    def from_json(calificacion_json):
 
-        id = usuario_json.get("id")
-        nombre = usuario_json.get("nombre")
-        rol = usuario_json.get("rol")
-        contraseña = usuario_json.get("contraseña")
-        return Usuario(id = id,
-                nombre = nombre,
-                rol = rol,
-                contraseña = contraseña)
+        id = calificacion_json.get("id")
+        puntaje = calificacion_json.get("puntaje")
+        comentario = calificacion_json.get("comentario")
+        userid = calificacion_json.get("user id")
+        poemaid = calificacion_json.get("poemaid")
+        return Calificacion(id = id,
+                puntaje = puntaje,
+                comentario = comentario,
+                userid = userid,
+                poemaid = poemaid)
