@@ -8,21 +8,23 @@ class Calificacion(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     puntaje = db.Column(db.Integer(), nullable = False)
     comentario = db.Column(db.String(100), nullable = True)
-    userid = db.Column(db.Integer(), nullable = False)
-    poemaid = db.Column(db.Integer(), nullable = False)
-
+    #Claves foránea
+    usuario_id = db.Column(db.Integer(), db.ForeignKey('usuario.id'), nullable = False)
+    poema_id = db.Column(db.Integer(), db.ForeignKey('poema.id'), nullable = False)
+    #Relaciones
+    usuario = db.relationship("Usuario", back_populates="calificaciones", uselist=False, single_parent=True)
+    poema = db.relationship("Poema", back_populates="calificaciones", uselist=False, single_parent=True)
     def __repr__(self):
 
-        return "<Califiaciòn: %r %r >" % (self.userid, self.puntaje, self.comentario)
+        return "<Califiaciòn: %r %r >" % (self.usuario_id, self.puntaje, self.comentario, self.poema_id)
     
     def to_json(self):
-
         calificacion_json = {
             "id" : self.id ,
             "puntaje" : int(self.puntaje) ,
             "comentario" : str(self.comentario),
-            "user id" : self.userid,
-            "poemaid" : self.poemaid
+            "ID Usuario" : self.usuario_id,
+            "ID Poema" : self.poema_id
         }
         return calificacion_json
     

@@ -10,6 +10,10 @@ class Usuario(db.Model):
     contraseña = db.Column(db.String(20), nullable = False)
     rol = db.Column(db.String(20), nullable = False)
     email = db.Column(db.String(100), nullable = False)
+    #Relación
+    poemas = db.relationship("Poema", back_populates="usuario", cascade="all, delete-orphan")
+    calificaciones = db.realtionship("Calificacion", back_populates="usuario", cascade="all, delete-orphan")
+    
     def __repr__(self):
 
         return "<Usuario: %r %r >" % (self.nombre, self.rol, self.email, self.contraseña)
@@ -22,6 +26,18 @@ class Usuario(db.Model):
             "rol" : str(self.rol),
             "contraseña" : str(self.contraseña), 
             "email" : str(self.email)
+        }
+        return usuario_json
+    
+    def to_json_complete(self):
+        usuario_json = {
+            "id" : self.id ,
+            "nombre" : str(self.nombre) ,
+            "rol" : str(self.rol),
+            "contraseña" : str(self.contraseña), 
+            "email" : str(self.email),
+            "poemas" : [poema.to_json() for poema in self.poemas],
+            "calificaciones" : [calificacion.to_json for calificacion in self.calificaciones]
         }
         return usuario_json
     
