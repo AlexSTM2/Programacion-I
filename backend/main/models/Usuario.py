@@ -12,7 +12,7 @@ class Usuario(db.Model):
     email = db.Column(db.String(100), nullable = False)
     #Relación
     poemas = db.relationship("Poema", back_populates="usuario", cascade="all, delete-orphan")
-    calificaciones = db.realtionship("Calificacion", back_populates="usuario", cascade="all, delete-orphan")
+    calificaciones = db.relationship("Calificacion", back_populates="usuario", cascade="all, delete-orphan")
     
     def __repr__(self):
 
@@ -21,14 +21,18 @@ class Usuario(db.Model):
     def to_json(self):
 
         usuario_json = {
-            "id" : self.id ,
-            "nombre" : str(self.nombre) ,
-            "rol" : str(self.rol),
-            "contraseña" : str(self.contraseña), 
-            "email" : str(self.email)
+            "ID Usuario" : self.id ,
+            "Nombre" : str(self.nombre) ,
+            "Rol" : str(self.rol),
+            "Contraseña" : str(self.contraseña), 
+            "Email" : str(self.email),
+            "Poemas" : len(self.poemas),
+            "Calificaciones" : len(self.calificaciones)
+
         }
         return usuario_json
-    
+    #Este es un llamado completo del usuario, no lo uso actualmente, 
+    #pero queda ahí
     def to_json_complete(self):
         usuario_json = {
             "id" : self.id ,
@@ -37,15 +41,15 @@ class Usuario(db.Model):
             "contraseña" : str(self.contraseña), 
             "email" : str(self.email),
             "poemas" : [poema.to_json() for poema in self.poemas],
-            "calificaciones" : [calificacion.to_json for calificacion in self.calificaciones]
+            "calificaciones" : [calificacion.to_json() for calificacion in self.calificaciones]
         }
         return usuario_json
     
     def to_json_short(self):
         usuario_json = {
-            'id': self.id,
-            'nombre': str(self.nombre),
-            'rol' : str(self.rol)
+            'ID Usuario': self.id,
+            'Nombre': str(self.nombre),
+            'Rol' : str(self.rol)
 
         }
         return usuario_json

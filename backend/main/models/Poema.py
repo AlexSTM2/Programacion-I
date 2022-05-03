@@ -1,5 +1,6 @@
 from .. import db
 from datetime import datetime
+import statistics
 
 class Poema(db.Model):
 #Acà defino las columnas que van a formar a mi tabla de Usuarios, con todos 
@@ -8,7 +9,7 @@ class Poema(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     titulo = db.Column(db.String(100), nullable = False)
     #Clave foránea
-    usuario_id = db.Column(db.Integer, db.Foreignkey('usuario.id'), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
 
     #Relación
     usuario= db.relationship('Usuario', back_populates='poemas', uselist=False, single_parent=True)
@@ -21,23 +22,40 @@ class Poema(db.Model):
     def __repr__(self):
 
         return "<Usuario: %r %r >" % (self.id, self.titulo, self.cuerpo, self.fecha)
+    def promedio_nota(self):
+        lista_cali = []
+
+        if len(self.calificaciones) == 0:
+            nota = "Sin calificación"
+        else:
+            for calificacion in self.calificaciones:
+                lista_cali.append(calificacion.puntaje)
+            nota = statistics.mean(lista_cali)
+
+        return nota
+
     #Convertir el objeto en JSON
     def to_json(self):
+        
 
         poema_json = {
-            "id" : self.id ,
-            "titulo" : str(self.titulo) ,
-            "cuerpo" : str(self.cuerpo), 
-            'fecha': str(self.fecha.strftime("%d-%m-%Y")),
-            "usuario" : self.usuario.to_json_short(),
-            'calificaciones' : [calificacion.to_json_short() for calificacion in self.calificaciones]
+            "ID Poema" : self.id ,
+            "Titulo" : str(self.titulo) ,
+            "Cuerpo" : str(self.cuerpo), 
+            'Fecha': str(self.fecha.strftime("%d-%m-%Y")),
+            "Usuario" : self.usuario.to_json_short(),
+            'Calificaciones' : [calificacion.to_json_short() for calificacion in self.calificaciones],
+            'Puntaje' : self.promedio_nota()
         }
         return poema_json
     
     def to_json_short(self):
         poema_json = {
-            'id': self.id,
-            'titulo' : str(self.titulo)
+            'ID Usuario' : self.usuario.id,
+            'ID Poema': self.id,
+            'Titulo' : str(self.titulo),
+            "Autor" : self.usuario.nombre,
+            'Fecha' : self.fecha
 
         }
         return poema_json

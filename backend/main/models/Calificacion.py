@@ -20,9 +20,9 @@ class Calificacion(db.Model):
     
     def to_json(self):
         calificacion_json = {
-            "id" : self.id ,
-            "puntaje" : int(self.puntaje) ,
-            "comentario" : str(self.comentario),
+            "ID Calificacion" : self.id ,
+            "Puntaje" : int(self.puntaje) ,
+            "Comentario" : str(self.comentario),
             "ID Usuario" : self.usuario_id,
             "ID Poema" : self.poema_id
         }
@@ -30,9 +30,10 @@ class Calificacion(db.Model):
     
     def to_json_short(self):
         calificacion_json = {
-            'id': self.id,
-            'puntaje': str(self.puntaje),
-            'comentario' : str(self.comentario)
+            "Nombre de usuario" : self.usuario.nombre,
+            'ID Calificación': self.id,
+            'Puntaje': str(self.puntaje),
+            'Comentario' : str(self.comentario)
         }
         return calificacion_json
     
@@ -43,10 +44,10 @@ class Calificacion(db.Model):
         id = calificacion_json.get("id")
         puntaje = calificacion_json.get("puntaje")
         comentario = calificacion_json.get("comentario")
-        userid = calificacion_json.get("user id")
-        poemaid = calificacion_json.get("poemaid")
+        usuario_id = calificacion_json.get("usuario_id")
+        poema_id = calificacion_json.get("poema_id")
         return Calificacion(id = id,
                 puntaje = puntaje,
                 comentario = comentario,
-                userid = userid,
-                poemaid = poemaid)
+                usuario_id = usuario_id,
+                poema_id = poema_id)
