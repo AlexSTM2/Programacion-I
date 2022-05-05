@@ -18,16 +18,16 @@ class Calificacion(Resource):
         db.session.commit()
         return '', 204
 #Este put no va, pero serìa programado de esta manera:
-    # def put(self,id):
+    def put(self,id):
 
-    #     calificacion = db.session.query(ModeloCalificacion).get_or_404(id)
-    #     data = request.get_json().items
-    #     for key, value in data:
-    #         setattr(calificacion, key, value)
+        calificacion = db.session.query(ModeloCalificacion).get_or_404(id)
+        data = request.get_json().items()
+        for key, value in data:
+            setattr(calificacion, key, value)
         
-    #     db.session.add(calificacion)
-    #     db.session.commit() 
-    #     return calificacion.to_json(), 201   
+        db.session.add(calificacion)
+        db.session.commit() 
+        return calificacion.to_json(), 201   
 
 class Calificaciones(Resource):
     #Obtener lista de recursos

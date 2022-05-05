@@ -2,7 +2,8 @@ from datetime import datetime
 from flask_restful import Resource
 from flask import request, jsonify
 from .. import db
-from main.models import ModeloPoema, ModeloUsuario
+from sqlalchemy import func
+from main.models import ModeloPoema, ModeloUsuario, ModeloCalificacion
 
 
 class Poema(Resource):
@@ -41,7 +42,11 @@ class Poemas(Resource):
                     poemas = poemas.filter(ModeloPoema.fecha <= datetime.strptime(value, "%d-%m-%Y"))
                 if key == "nombre_us":
                     poemas = poemas.filter(ModeloPoema.usuario.has(ModeloUsuario.nombre.like("%"+ value +"%")))
-       
+                if key == "puntaje":
+                    poemas = poemas.outerjoin(ModeloPoema.calificaciones).group_by(ModeloPoema.id).having(func.avg(ModeloCalificacion.puntaje) <= float(value))
+                if key == "puntaje[desc]":
+                    poemas = poemas.outerjoin(ModeloPoema.calificaciones).group_by(ModeloPoema.id).having(func.avg(ModeloCalificacion.puntaje) >= float(value))
+                
                 #Estos son los ordenamientos
                 if key == "ordenar_por":
                     if value == "fecha":
@@ -49,7 +54,13 @@ class Poemas(Resource):
                     if value == "fecha[desc]":
                         poemas = poemas.order_by(ModeloPoema.fecha.desc())
                     if value == "calificaciones":
-                        poemas = "Terminar agrupamientos"
+                        poemas = poemas.outerjoin(ModeloPoema.calificaciones).group_by(ModeloPoema.id).order_by(func.avg(ModeloCalificacion.puntaje))
+                    if value == "calificaciones[desc]":
+                        poemas = poemas.outerjoin(ModeloPoema.calificaciones).group_by(ModeloPoema.id).order_by(func.avg(ModeloCalificacion.puntaje).desc())
+                    if value == "nombre_autor":
+                        poemas = poemas.outerjoin(ModeloPoema.usuario).group_by(ModeloPoema.id).order_by(ModeloUsuario.nombre)
+                    if value == "nombre_autor[desc]":
+                        poemas =  poemas.outerjoin(ModeloPoema.usuario).group_by(ModeloPoema.id).order_by(ModeloUsuario.nombre.desc())   
        
        #Paginado
        poemas = poemas.paginate(page, per_page, True, 5)

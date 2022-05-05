@@ -33,7 +33,8 @@ class Calificacion(db.Model):
             "Nombre de usuario" : self.usuario.nombre,
             'ID Calificación': self.id,
             'Puntaje': str(self.puntaje),
-            'Comentario' : str(self.comentario)
+            'Comentario' : str(self.comentario),
+            'Poema' : self.poema.titulo
         }
         return calificacion_json
     

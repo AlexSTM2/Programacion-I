@@ -23,8 +23,7 @@ class Usuario(db.Model):
         usuario_json = {
             "ID Usuario" : self.id ,
             "Nombre" : str(self.nombre) ,
-            "Rol" : str(self.rol),
-            "Contraseña" : str(self.contraseña), 
+            "Rol" : str(self.rol), 
             "Email" : str(self.email),
             "Poemas" : len(self.poemas),
             "Calificaciones" : len(self.calificaciones)
@@ -38,7 +37,6 @@ class Usuario(db.Model):
             "id" : self.id ,
             "nombre" : str(self.nombre) ,
             "rol" : str(self.rol),
-            "contraseña" : str(self.contraseña), 
             "email" : str(self.email),
             "poemas" : [poema.to_json() for poema in self.poemas],
             "calificaciones" : [calificacion.to_json() for calificacion in self.calificaciones]
@@ -49,7 +47,9 @@ class Usuario(db.Model):
         usuario_json = {
             'ID Usuario': self.id,
             'Nombre': str(self.nombre),
-            'Rol' : str(self.rol)
+            'Rol' : str(self.rol),
+            'Poemas' : len(self.poemas),
+            'Calificaciones' : len(self.calificaciones)
 
         }
         return usuario_json

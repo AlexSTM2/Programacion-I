@@ -18,10 +18,10 @@ class Poema(db.Model):
 
     cuerpo = db.Column(db.String(1000), nullable = False)
     fecha =db.Column(db.DateTime, nullable=False, default=datetime.now())
-
     def __repr__(self):
 
         return "<Usuario: %r %r >" % (self.id, self.titulo, self.cuerpo, self.fecha)
+    
     def promedio_nota(self):
         lista_cali = []
 
@@ -55,7 +55,8 @@ class Poema(db.Model):
             'ID Poema': self.id,
             'Titulo' : str(self.titulo),
             "Autor" : self.usuario.nombre,
-            'Fecha' : self.fecha
+            'Fecha': str(self.fecha.strftime("%d-%m-%Y")),
+            'Puntaje' : self.promedio_nota()
 
         }
         return poema_json
