@@ -3,11 +3,18 @@ from flask import Flask
 from dotenv import load_dotenv
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
+
 #Inicio API de Flask restful
 api = Api()
+
 #Mètodo que inicializa todos los mòdulos
 #Inicio SQLAlchemy
 db = SQLAlchemy()
+
+#Inicializo JWT
+jwt = JWTManager()
+
 
 def create_app():
     #Inicializa Flask
@@ -31,4 +38,15 @@ def create_app():
     api.add_resource(resources.RecursoCalificaciones, "/calificaciones")
     #Cargar la aplicaciòn en la API de Flask Restful
     api.init_app(app)
+    
+    #Cargo la clave secreta
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+    #Cargo el tiempo de expiraciòn de los tokens
+    app.config['JWWT_ACCESS_TOKEN_EXPIRES'] = int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES'))
+    jwt.init_app(app)
+
+    from main.auth import routes
+    #Importo el blueprint
+    app.register_blueprint(auth.routes.auth)
+    
     return app

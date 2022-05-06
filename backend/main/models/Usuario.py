@@ -1,5 +1,7 @@
 #Importo la base de datos desde el main
 from .. import db
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 class Usuario(db.Model):
 #Acà defino las columnas que van a formar a mi tabla de Usuarios, con todos 
@@ -9,11 +11,24 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(100), nullable = False)
     contraseña = db.Column(db.String(20), nullable = False)
     rol = db.Column(db.String(20), nullable = False)
-    email = db.Column(db.String(100), nullable = False)
+    email = db.Column(db.String(100),unique = True, index = True, nullable = False)
     #Relación
     poemas = db.relationship("Poema", back_populates="usuario", cascade="all, delete-orphan")
     calificaciones = db.relationship("Calificacion", back_populates="usuario", cascade="all, delete-orphan")
     
+    #Getter de la contraseña plana no permite leerla
+    @property
+    def plain_password(self):
+        raise AttributeError('No se puede leer la contraseña')
+    #El setter de la contraseña toma un valor en texto plano
+    #Calcula el hash y lo guarda en el atributo password
+    @plain_password.setter
+    def plain_password(self, contraseña):
+        self.contraseña = generate_password_hash(contraseña)
+    #Mètodo que compara una contraseña en texto plano con el hash guardado en la base de datos
+    def validate_pass(self,contraseña):
+        return check_password_hash(self.contraseña, contraseña)
+
     def __repr__(self):
 
         return "<Usuario: %r %r >" % (self.nombre, self.rol, self.email, self.contraseña)
@@ -66,5 +81,5 @@ class Usuario(db.Model):
         return Usuario(id = id,
                 nombre = nombre,
                 rol = rol,
-                contraseña = contraseña,
+                plain_password = contraseña,
                 email = email)

@@ -3,21 +3,28 @@ from flask import request, jsonify
 from .. import db
 from sqlalchemy import func
 from main.models import ModeloUsuario, ModeloPoema, ModeloCalificacion
+from main.auth.decorators import *
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class Usuario(Resource):
-
+    #Obtener recurso
+    @jwt_required()
     def get(self, id):
         usuario = db.session.query(ModeloUsuario).get_or_404(id)
         return usuario.to_json()
-        
+    
+    #Eliminar recurso
+    # Va esto, pero tengo que configurar ese decorador 
+    #@admin_requiered  
     def delete(self, id):
         usuario =  db.session.query(ModeloUsuario).get_or_404(id)
         db.session.delete(usuario)
         db.session.commit()
         return '', 204
-
+    
+    #Modificar recurso
+    @jwt_required()
     def put(self, id):
-
         usuario = db.session.query(ModeloUsuario).get_or_404(id)
         data = request.get_json().items()
         for key, value in data:
@@ -28,11 +35,12 @@ class Usuario(Resource):
 
 class Usuarios(Resource):
     #Obtener lista de recursos
+    @jwt_required()
     def get(self):
         
         usuarios = db.session.query(ModeloUsuario)
         page = 1
-        per_page = 3
+        per_page = 2
         #Hago el request y los filtros
         if request.get_json():
             filtros = request.get_json().items()
@@ -59,7 +67,7 @@ class Usuarios(Resource):
                     if value == "cant_calificaciones[desc]":
                         usuarios = usuarios.outerjoin(ModeloUsuario.calificaciones).group_by(ModeloUsuario.id).order_by(func.count(ModeloCalificacion.id).desc())
         #Este es el paginado
-        usuarios = usuarios.paginate(page, per_page, True, 5)
+        usuarios = usuarios.paginate(page, per_page, True, 10)
         return jsonify({'Usuarios':[usuario.to_json_short() for usuario in usuarios.items],
         'Total' : usuarios.total, 
        'Páginas': usuarios.pages, 
