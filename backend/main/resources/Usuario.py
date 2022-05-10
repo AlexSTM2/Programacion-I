@@ -3,7 +3,7 @@ from flask import request, jsonify
 from .. import db
 from sqlalchemy import func
 from main.models import ModeloUsuario, ModeloPoema, ModeloCalificacion
-from main.auth.decorators import *
+from main.auth import decorators
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 class Usuario(Resource):
