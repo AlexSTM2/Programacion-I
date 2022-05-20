@@ -3,39 +3,49 @@ from flask import request, jsonify
 from .. import db
 from sqlalchemy import func
 from main.models import ModeloUsuario, ModeloPoema, ModeloCalificacion
-from main.auth import decorators
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from main.auth.decorators import admin_required
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+
 
 class Usuario(Resource):
     #Obtener recurso
-    @jwt_required()
     def get(self, id):
         usuario = db.session.query(ModeloUsuario).get_or_404(id)
         return usuario.to_json()
     
     #Eliminar recurso
-    # Va esto, pero tengo que configurar ese decorador 
-    #@admin_requiered  
+    @jwt_required()
     def delete(self, id):
+        id_usuario = get_jwt_identity()
         usuario =  db.session.query(ModeloUsuario).get_or_404(id)
-        db.session.delete(usuario)
-        db.session.commit()
-        return '', 204
-    
+        claims = get_jwt()
+        if claims['rol'] == "admin" or id_usuario == id:
+            
+            db.session.delete(usuario)
+            db.session.commit()
+            return '', 204
+        else:
+            return 'Este usuario no puede realizar esa acción', 403
+            
     #Modificar recurso
     @jwt_required()
     def put(self, id):
-        usuario = db.session.query(ModeloUsuario).get_or_404(id)
-        data = request.get_json().items()
-        for key, value in data:
-            setattr(usuario, key, value)
-        db.session.add(usuario)
-        db.session.commit()
-        return usuario.to_json(), 201
+        id_usuario = get_jwt_identity()
+        claims = get_jwt()
+        if claims['rol'] == "admin" or id_usuario == id:
+            usuario = db.session.query(ModeloUsuario).get_or_404(id)
+            data = request.get_json().items()
+            for key, value in data:
+                setattr(usuario, key, value)
+            db.session.add(usuario)
+            db.session.commit()
+            return usuario.to_json(), 201
+        else:
+            return 'Este usuario no puede realizar esa acción', 403
 
 class Usuarios(Resource):
     #Obtener lista de recursos
-    @jwt_required()
+    @admin_required
     def get(self):
         
         usuarios = db.session.query(ModeloUsuario)
@@ -74,6 +84,7 @@ class Usuarios(Resource):
        "Página" : page})
 
     #Insertar recurso
+    @admin_required
     def post(self):
         usuario = ModeloUsuario.from_json(request.get_json())
         db.session.add(usuario)

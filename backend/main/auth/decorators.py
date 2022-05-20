@@ -12,11 +12,11 @@ def admin_required(fn):
         #Obtener claims de adentro del JWT
         claims = get_jwt()
         #Verificar que el rol sea admin
-        if claims['rol'] =="admin" :
+        if claims['rol'] =="admin":
             #Ejecutar función
             return fn(*args, **kwargs)
         else:
-            return 'Only admins can access', 403
+            return 'Acceso solo disponible para administradores', 403
     return wrapper
 
 #Atributo para definir al usuario
@@ -29,8 +29,8 @@ def user_identity_lookup(usuario):
 @jwt.additional_claims_loader
 def add_claims_to_access_token(usuario):
     claims = {
-        'Rol': usuario.rol,
-        'ID Usuario': usuario.id,
-        'Email': usuario.email
+        'rol': usuario.rol,
+        'id usuario': usuario.id,
+        'email': usuario.email
     }
     return claims
