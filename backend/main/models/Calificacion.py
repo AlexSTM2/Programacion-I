@@ -1,4 +1,5 @@
 #Importo la base de datos desde el main
+from email.policy import default
 from .. import db
 
 class Calificacion(db.Model):
@@ -8,9 +9,11 @@ class Calificacion(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     puntaje = db.Column(db.Integer(), nullable = False)
     comentario = db.Column(db.String(100), nullable = True)
+
     #Claves foránea
-    usuario_id = db.Column(db.Integer(), db.ForeignKey('usuario.id'), nullable = False)
+    usuario_id = db.Column(db.Integer(), db.ForeignKey('usuario.id'), nullable = False, unique=True, default=0)
     poema_id = db.Column(db.Integer(), db.ForeignKey('poema.id'), nullable = False)
+    
     #Relaciones
     usuario = db.relationship("Usuario", back_populates="calificaciones", uselist=False, single_parent=True)
     poema = db.relationship("Poema", back_populates="calificaciones", uselist=False, single_parent=True)
@@ -27,7 +30,16 @@ class Calificacion(db.Model):
             "ID Poema" : self.poema_id
         }
         return calificacion_json
-    
+
+    def to_json_public(self):
+        calificacion_json = {
+            "Usuario: " : self.usuario.nombre,
+            "Poema: " : self.poema.titulo,
+            "Puntaje: " : int(self.puntaje),
+            "Comentario: " : str(self.comentario)
+        }
+        return calificacion_json
+
     def to_json_short(self):
         calificacion_json = {
             "Nombre de usuario" : self.usuario.nombre,

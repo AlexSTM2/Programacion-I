@@ -8,18 +8,30 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 
 class Usuario(Resource):
+
     #Obtener recurso
+    @jwt_required(optional=True)
     def get(self, id):
-        usuario = db.session.query(ModeloUsuario).get_or_404(id)
-        return usuario.to_json()
-    
+
+        claims = get_jwt()
+        if "rol" in claims:
+            if claims["rol"] == "admin":
+                usuario = db.session.query(ModeloUsuario).get_or_404(id)
+                return usuario.to_json()
+            else:
+                usuario = db.session.query(ModeloUsuario).get_or_404(id)
+                return usuario.to_json_public()
+        else:
+            usuario = db.session.query(ModeloUsuario).get_or_404(id)
+            return usuario.to_json_public()
+
     #Eliminar recurso
     @jwt_required()
     def delete(self, id):
         id_usuario = get_jwt_identity()
         usuario =  db.session.query(ModeloUsuario).get_or_404(id)
         claims = get_jwt()
-        if claims['rol'] == "admin" or id_usuario == id:
+        if claims['rol'] == "admin" or id_usuario == int(id):
             
             db.session.delete(usuario)
             db.session.commit()
@@ -32,7 +44,8 @@ class Usuario(Resource):
     def put(self, id):
         id_usuario = get_jwt_identity()
         claims = get_jwt()
-        if claims['rol'] == "admin" or id_usuario == id:
+        if claims['rol'] == "admin" or id_usuario == int(id):
+            
             usuario = db.session.query(ModeloUsuario).get_or_404(id)
             data = request.get_json().items()
             for key, value in data:

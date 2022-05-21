@@ -4,15 +4,31 @@ from flask import request, jsonify
 from .. import db
 from sqlalchemy import func
 from main.models import ModeloPoema, ModeloUsuario, ModeloCalificacion
-
+from main.auth.decorators import admin_required
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 class Poema(Resource):
 
+    @jwt_required(optional=True)
     def get(self, id):
-        poema = db.session.query(ModeloPoema).get_or_404(id)
-        return poema.to_json()
 
+        claims = get_jwt()
+        if "rol" in claims:
+            if claims["rol"] == "admin":
+                poema = db.session.query(ModeloPoema).get_or_404(id)
+                return poema.to_json()
+            else:
+                poema = db.session.query(ModeloPoema).get_or_404(id)
+                return poema.to_json_public()
+        else:
+            poema = db.session.query(ModeloPoema).get_or_404(id)
+            return poema.to_json_public()
+
+    @jwt_required()           
     def delete(self, id):
+        
+        claims = get_jwt()
+        id_usuario = get_jwt_identity()
         poema = db.session.query(ModeloPoema).get_or_404(id)
         db.session.delete(poema)
         db.session.commit()

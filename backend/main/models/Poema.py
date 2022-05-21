@@ -8,16 +8,17 @@ class Poema(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     titulo = db.Column(db.String(100), nullable = False)
+
     #Clave foránea
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
 
     #Relación
     usuario= db.relationship('Usuario', back_populates='poemas', uselist=False, single_parent=True)
     calificaciones = db.relationship("Calificacion", back_populates="poema", cascade="all, delete-orphan")
-    
 
     cuerpo = db.Column(db.String(1000), nullable = False)
     fecha =db.Column(db.DateTime, nullable=False, default=datetime.now())
+    
     def __repr__(self):
 
         return "<Usuario: %r %r >" % (self.id, self.titulo, self.cuerpo, self.fecha)
@@ -60,7 +61,16 @@ class Poema(db.Model):
 
         }
         return poema_json
-    
+    def to_json_public(self):
+
+        poema_json = {
+            "Autor: " : self.usuario.nombre,
+            "Título: " : self.titulo,
+            "Fecha: " : str(self.fecha.strftime("%d-%m-%Y")), 
+            "Puntaje: " : self.promedio_nota()
+        }
+        return poema_json
+
     @staticmethod
     #Vamos a convertir JSON a objeto
     def from_json(poema_json):

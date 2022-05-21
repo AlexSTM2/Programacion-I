@@ -64,6 +64,15 @@ class Usuario(db.Model):
         }
         return usuario_json
     
+    def to_json_public(self):
+        usuario_json = {
+            "Nombre: " : self.nombre,
+            "Rol: " : self.rol,
+            "Cantidad de poemas: " : len(self.poemas),
+            "Cantidad de calificaciones: " : len(self.calificaciones)
+        }
+        return usuario_json
+
     @staticmethod
     #Vamos a convertir JSON a objeto
     def from_json(usuario_json):
