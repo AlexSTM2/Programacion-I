@@ -40,13 +40,13 @@ class Poema(db.Model):
         
 
         poema_json = {
-            "ID Poema" : self.id ,
-            "Titulo" : str(self.titulo) ,
-            "Cuerpo" : str(self.cuerpo), 
-            'Fecha': str(self.fecha.strftime("%d-%m-%Y")),
-            "Usuario" : self.usuario.to_json_short(),
-            'Calificaciones' : [calificacion.to_json_short() for calificacion in self.calificaciones],
-            'Puntaje' : self.promedio_nota()
+            "ID Poema " : self.id ,
+            "Titulo " : str(self.titulo) ,
+            "Cuerpo " : str(self.cuerpo), 
+            'Fecha ': str(self.fecha.strftime("%d-%m-%Y")),
+            "Autor " : self.usuario.to_json_short(),
+            'Calificaciones ' : [calificacion.to_json_short() for calificacion in self.calificaciones],
+            'Puntaje ' : self.promedio_nota()
         }
         return poema_json
     
@@ -61,13 +61,15 @@ class Poema(db.Model):
 
         }
         return poema_json
+
     def to_json_public(self):
 
         poema_json = {
             "Autor: " : self.usuario.nombre,
             "Título: " : self.titulo,
             "Fecha: " : str(self.fecha.strftime("%d-%m-%Y")), 
-            "Puntaje: " : self.promedio_nota()
+            "Puntaje: " : self.promedio_nota(),
+            "Cantidad de calificaciones: " : len(self.calificaciones)
         }
         return poema_json
 

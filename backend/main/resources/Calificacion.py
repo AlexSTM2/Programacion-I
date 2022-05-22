@@ -71,12 +71,12 @@ class Calificaciones(Resource):
     @jwt_required()
     def post(self):
 
+        id_usuario = get_jwt_identity()
         calificacion = ModeloCalificacion.from_json(request.get_json())
         claims = get_jwt()
         if "rol" in claims:
             if claims['rol'] == "Poeta":
-                id_usuario = get_jwt_identity()
-                calificacion.usuario_id = id_usuario
+                calificacion.usuario_id = int(id_usuario)
                 db.session.add(calificacion)
                 db.session.commit()
                 return calificacion.to_json(), 201

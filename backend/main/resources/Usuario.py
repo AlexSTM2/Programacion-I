@@ -6,7 +6,6 @@ from main.models import ModeloUsuario, ModeloPoema, ModeloCalificacion
 from main.auth.decorators import admin_required
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
-
 class Usuario(Resource):
 
     #Obtener recurso
