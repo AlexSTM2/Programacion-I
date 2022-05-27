@@ -1,0 +1,3 @@
+{{usuario.nombre}} tu poema {{poema.titulo}} ha recibido una calificación!
+
+{{usuario_califica.nombre}} lo ha calificado.
