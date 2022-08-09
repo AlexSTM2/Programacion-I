@@ -1,0 +1,74 @@
+:root{
+    --color_fondo: hsl(0, 0%, 19%);
+    --fondo_blanco: hsl(217, 29%, 89%);
+}
+.foro {
+    font-size: 20px;
+    color: aliceblue;
+}
+
+.ajuste_foro {
+    margin-left: 45%;
+}
+
+.ajuste_foro_perfil {
+    margin-left: 10%;
+}
+
+.links {
+    border-style: solid;
+    border-color: black;
+    margin: 2px;
+    background-color:white;
+    border-radius: 5px;
+    color: var(--color_fondo);
+    padding: 10px;
+}
+
+.texto {
+    font-size: 17px;
+    color: #272727;
+}
+
+#fondo {
+    background: var(--fondo_blanco);
+}
+
+.header1 {
+    border-style: solid;
+    background-color: blueviolet;
+}
+
+.contenedor {
+    display: flex;
+}
+
+.usuario {
+    margin-left: 15%;
+}
+
+.ingresar {
+    margin-left: 40%;
+}
+
+.nav-busqueda {
+    display: flex;
+    margin-right: 10%;
+}
+
+.caja_poema {
+    border-style: solid;
+    border-color: black;
+    margin: 2px;
+    background-color: white;
+    border-radius: 5px;
+    color: var(--color_fondo);
+    padding: 10px;
+    width: 800px;
+    height: 60px;
+    box-shadow: 5px 5px 5px #3d3d3d;
+}
+
+.ajuste_boton {
+    margin: 10px;
+}
