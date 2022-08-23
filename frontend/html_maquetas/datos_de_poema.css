@@ -49,10 +49,16 @@ root{
     height: 300px;
     box-shadow: 5px 5px 5px #2e2e2e;
     margin: 2px;
+    text-align: center;
 }
 
 .contenedor {
-    align-items: center;
+    padding: 10px;
+    border-style: solid;
+    border-color: black;
+    background-color:white;
+    border-radius: 30px;
+    margin: 10px;
 }
 
 .caja_calificaciones {
