@@ -70,5 +70,20 @@
 }
 
 .ajuste_boton {
-    margin: 10px;
+    margin: 10px;;
+}
+
+.login_box {
+    
+    padding: 20px;
+
+}
+
+.login_msg {
+    margin-left: 10%;
+    margin-top: 10%;
+}
+
+.text_color{
+    color: blueviolet;
 }
