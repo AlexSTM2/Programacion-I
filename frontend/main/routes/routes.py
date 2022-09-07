@@ -34,7 +34,7 @@ def ver_calif_usuario():
 
 @app.route('/subir-poema')
 def subir_poema():
-    return render_template('agregar_subir_poema.html')
+    return render_template('subir_poema.html')
 
 @app.route('/mi-perfil')
 def mi_perfil():
@@ -43,3 +43,19 @@ def mi_perfil():
 @app.route('/mis-poemas')
 def mis_poemas():
     return render_template('mis_poemas.html')
+
+@app.route('/calificar')
+def calificar():
+    return render_template('calificar.html')
+
+@app.route('/modif_calif')
+def modificar_cal():
+    return render_template('modificar_calif.html')
+
+@app.route('/modif-perfil')
+def modificar_perfil():
+    return render_template('modificar_mi_perfil.html')
+
+@app.route('mis-calif')
+def mis_calif():
+    return render_template('mis_calificaciones.html')
