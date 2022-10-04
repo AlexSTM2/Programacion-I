@@ -1,5 +1,6 @@
 #Aquí agrego las rutas
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, make_response, request
+import requests, json
 
 
 app = Blueprint('app', __name__, url_prefix= '/')
@@ -14,7 +15,22 @@ def index_usr():
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+
+    api_url = "https//:127.0.0.1:8500/auth/login"
+
+    data = {"email":"admin@gmail.com","contraseña":"1234"}
+    headers = {"Content-Type" : "application/json"}
+    response = requests.post(api_url, json = data, headers = headers)
+
+    token = json.loads(response.text)
+    token = token["access_token"]
+    print(response.status_code)
+
+    resp = make_response(render_template('login.html'))
+    resp.set_cookie("access_token", token)
+    
+    return resp
+
 
 @app.route('/ver-poema')
 def ver_poema_publico():
