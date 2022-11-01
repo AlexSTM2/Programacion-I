@@ -1,9 +1,9 @@
-#Aquí agrego las rutas
+#Aquí agrego las rutas de la aplicación
 from flask import Blueprint, render_template, make_response, request
 import requests, json
 
 
-app = Blueprint('app', __name__, url_prefix= '/')
+app = Blueprint('main', __name__, url_prefix= '/')
 
 @app.route('/')
 def index():
@@ -13,10 +13,10 @@ def index():
 def index_usr():
     return render_template('menu_principal_usuario.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
 
-    api_url = "https//:127.0.0.1:8500/auth/login"
+    api_url = "https//:127.0.0.1:5000/login"
 
     data = {"email":"admin@gmail.com","contraseña":"1234"}
     headers = {"Content-Type" : "application/json"}
