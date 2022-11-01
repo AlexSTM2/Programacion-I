@@ -1,5 +1,6 @@
 #Aquí agrego las rutas de la aplicación
-from flask import Blueprint, render_template, make_response, request
+from crypt import methods
+from flask import Blueprint, render_template, make_response
 import requests, json
 
 
@@ -13,21 +14,20 @@ def index():
 def index_usr():
     return render_template('menu_principal_usuario.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods = ["GET", "POST"])
 def login():
 
-    api_url = "https//:127.0.0.1:5000/login"
+    api_url = "http://127.0.0.1:8500/auth/login"
 
     data = {"email":"admin@gmail.com","contraseña":"1234"}
     headers = {"Content-Type" : "application/json"}
     response = requests.post(api_url, json = data, headers = headers)
 
     token = json.loads(response.text)
-    token = token["access_token"]
-    print(response.status_code)
+    token = token['access_token']
 
     resp = make_response(render_template('login.html'))
-    resp.set_cookie("access_token", token)
+    resp.set_cookie('access_token', token)
     
     return resp
 
