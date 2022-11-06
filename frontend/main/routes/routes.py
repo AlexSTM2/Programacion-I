@@ -1,8 +1,7 @@
 #Aquí agrego las rutas de la aplicación
-from crypt import methods
-from flask import Blueprint, render_template, make_response
+from flask import Blueprint, render_template, make_response, request, current_app, redirect, url_for
 import requests, json
-
+from . import functions as f   
 
 app = Blueprint('main', __name__, url_prefix= '/')
 
@@ -17,19 +16,44 @@ def index_usr():
 @app.route('/login', methods = ["GET", "POST"])
 def login():
 
-    api_url = "http://127.0.0.1:8500/auth/login"
+    if(request.method == "POST"):
+        #Obtener datos del formulario - Esto lo traigo del HTML con los name de los inputs.
+        email = request.form.get("email")
+        password = request.form.get("password")
+        
+        if email != None and password != None:
+            api_url = f'{current_app.config["API_URL"]}/auth/login'
+            #Envio de logueo
+            data = {"email": email, "password":password}
+            headers = {"Content-Type" : "application/json"}
 
-    data = {"email":"admin@gmail.com","contraseña":"1234"}
-    headers = {"Content-Type" : "application/json"}
-    response = requests.post(api_url, json = data, headers = headers)
+            response = requests.post(api_url, json=data, headers=headers)
 
-    token = json.loads(response.text)
-    token = token['access_token']
+            if (response.ok):
+                #Obtener el token desde response.
+                response = json.loads(response.text)
+                token = response["access_token"]
+                user_id = str(response["id"])
 
-    resp = make_response(render_template('login.html'))
-    resp.set_cookie('access_token', token)
-    
-    return resp
+
+                api_url = f'{current_app.config["API_URL"]}'
+                response = f.get_poems(api_url)
+
+                poems = json.loads(response.text)
+                list_poems = poems["poems"]
+                user = f.get_user(user_id)
+                user = json.loads(user.text)
+
+                resp = make_response(render_template("poet_main_page.html", poems=list_poems, user=user, jwt=token))
+                resp.set_cookie("access_token", token)
+                resp.set_cookie("id", user_id)
+                
+                return resp
+            
+        return render_template("login.html", error="Usuario o contraseña incorrectos")
+    else:
+        return render_template("login.html")
+
 
 
 @app.route('/ver-poema')

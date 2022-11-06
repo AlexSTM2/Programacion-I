@@ -14,7 +14,7 @@ def create_app():
     #Cargar variables de entorno 
     load_dotenv()
 
-    # app.config['API_URL'] = os.getenv('API_URL')
+    app.config['API_URL'] = os.getenv('API_URL')
     # login_manager.init_app(app)
 
     app.register_blueprint(routes.app)
