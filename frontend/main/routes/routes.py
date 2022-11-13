@@ -10,44 +10,38 @@ def index():
     return render_template('menu_principal.html')
 
 @app.route('/usr')
-def index_usr():
-    return render_template('menu_principal_usuario.html')
+def index_usr(jwt = None):
+    if jwt == None:
+        jwt = f.obtener_jwt()
+        
+    resp = f.obtener_poemas(jwt=jwt)
+    poemas = f.obtener_json(resp)
+    lista_poemas = poemas["Poemas"]
+    usuario = f.obtener_usuario(f.obtener_id())
+    usuario = json.loads(usuario.text)
+    return render_template('menu_principal_usuario.html', poemas = lista_poemas, jwt = jwt, usuario = usuario)
 
 @app.route('/login', methods = ["GET", "POST"])
 def login():
 
     if(request.method == "POST"):
-        #Obtener datos del formulario - Esto lo traigo del HTML con los name de los inputs.
+
         email = request.form.get("email")
         password = request.form.get("password")
-        
-        if email != None and password != None:
-            api_url = f'{current_app.config["API_URL"]}/auth/login'
-            #Envio de logueo
-            data = {"email": email, "password":password}
-            headers = {"Content-Type" : "application/json"}
 
-            response = requests.post(api_url, json=data, headers=headers)
+        if email != None and password != None:
+
+            response = f.login(email, password)
 
             if (response.ok):
-                #Obtener el token desde response.
                 response = json.loads(response.text)
-                token = response["access_token"]
-                user_id = str(response["id"])
+                token = response["Token de acceso"]
+                user_id = str(response["ID Usuario"])
 
+                resp = make_response(index_usr(jwt=token))
+                resp.set_cookie("Token de acceso", token)
+                resp.set_cookie("ID Usuario", user_id)
 
-                api_url = f'{current_app.config["API_URL"]}'
-                response = f.get_poems(api_url)
-
-                poems = json.loads(response.text)
-                list_poems = poems["poems"]
-                user = f.get_user(user_id)
-                user = json.loads(user.text)
-
-                resp = make_response(render_template("poet_main_page.html", poems=list_poems, user=user, jwt=token))
-                resp.set_cookie("access_token", token)
-                resp.set_cookie("id", user_id)
-                
                 return resp
             
         return render_template("login.html", error="Usuario o contraseña incorrectos")

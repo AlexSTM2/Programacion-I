@@ -98,7 +98,7 @@ class Poemas(Resource):
                                 poemas =  poemas.outerjoin(ModeloPoema.usuario).group_by(ModeloPoema.id).order_by(ModeloUsuario.nombre.desc()) 
                 
         #Paginado
-        poemas = poemas.paginate(page, per_page, True, 10)
+        poemas = poemas.paginate(page=page, per_page=per_page, error_out=False)
         if "rol" in claims:
             if claims["rol"] == "admin":
                 return jsonify({'Poemas':[poema.to_json() for poema in poemas.items],
