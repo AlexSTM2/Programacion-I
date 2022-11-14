@@ -23,11 +23,11 @@ class Calificacion(db.Model):
     
     def to_json(self):
         calificacion_json = {
-            "ID Calificacion" : self.id ,
+            "ID_Calificacion" : self.id ,
             "Puntaje" : int(self.puntaje) ,
             "Comentario" : str(self.comentario),
-            "ID Usuario" : self.usuario_id,
-            "ID Poema" : self.poema_id
+            "Usuario" : self.usuario.nombre,
+            "ID_Poema" : self.poema_id
         }
         return calificacion_json
 

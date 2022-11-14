@@ -89,7 +89,7 @@ class Usuarios(Resource):
                     if value == "cant_calificaciones[desc]":
                         usuarios = usuarios.outerjoin(ModeloUsuario.calificaciones).group_by(ModeloUsuario.id).order_by(func.count(ModeloCalificacion.id).desc())
         #Este es el paginado
-        usuarios = usuarios.paginate(page, per_page, True, 10)
+        usuarios = usuarios.paginate(page=page, per_page=per_page)
         return jsonify({'Usuarios':[usuario.to_json_short() for usuario in usuarios.items],
         'Total' : usuarios.total, 
        'Páginas': usuarios.pages, 

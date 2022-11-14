@@ -19,6 +19,9 @@ def index_usr(jwt = None):
     lista_poemas = poemas["Poemas"]
     usuario = f.obtener_usuario(f.obtener_id())
     usuario = json.loads(usuario.text)
+    print(type(usuario))
+    print(type(poemas))
+
     return render_template('menu_principal_usuario.html', poemas = lista_poemas, jwt = jwt, usuario = usuario)
 
 @app.route('/login', methods = ["GET", "POST"])
@@ -54,9 +57,18 @@ def login():
 def ver_poema_publico():
     return render_template('datos_poema_publico.html')
 
-@app.route('/ver-poema-usuario')
-def ver_poema_usuario():
-    return render_template('datos_poema_usuario.html')
+@app.route('/ver-poema-usuario/<int:id>')
+def ver_poema_usuario(id):
+    jwt = f.obtener_jwt()
+    if jwt == None:
+        return redirect(url_for('main.login'))
+    else:
+        usuario = f.obtener_usuario(f.obtener_id())
+        usuario = json.loads(usuario.text)
+        resp = f.obtener_poema(id)
+        poema = f.obtener_json(resp)
+        return render_template('datos_poema_usuario.html', poema = poema, usuario=usuario)
+
 
 @app.route('/ver-calif-publico')
 def ver_calif_publico():

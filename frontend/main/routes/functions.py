@@ -54,10 +54,10 @@ def obtener_nombre(id_usuario):
 
 
 #Obtener las calificaciones
-def calificaciones_id(id):
+def calificaciones_poema(id):
     api_url = f'{current_app.config["API_URL"]}/calificaciones'
 
-    data = {"poema_id": id}
+    data = {"ID_Poema": id}
     headers = obtener_headers()
     return requests.get(api_url, json = data, headers = headers)
 
@@ -94,7 +94,6 @@ def redirect_to(url):
 def login(email, contraseña):
     api_url = f'{current_app.config["API_URL"]}/auth/login'
     data = {"email": email, "contraseña": contraseña}
-    print("Headers-login")
     headers = obtener_headers(without_token = True)
     return requests.post(api_url, json = data, headers = headers)
 
