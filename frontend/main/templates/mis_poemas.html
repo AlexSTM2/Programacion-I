@@ -11,14 +11,15 @@
   <header class="header1">
     <nav class="nav d-flex justify-content-between">
       <div class="d-flex justify-content-center">
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/subir-poema">Subir poema</a>
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/mi-perfil">Mi perfil</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="/subir_poema">Subir poema</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="/mi_perfil">Mi perfil</a>
       </div>
       <div>
         <a class="flex-sm-fill text-sm-center nav-link foro" aria-current="page" href="/usr">Foro de poemas</a>
       </div>
-      <div class="usuario">
+      <div class="usuario d-flex">
         <p class="flex-sm-fill text-sm-center links">{{usuario.Nombre}}</p>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.logout')}}">Logout</a>
       </div>
     </nav>
   </header>
@@ -87,7 +88,7 @@
           <li>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-              <label class="form-check-label" for="flexCheckDefault">
+              <subir-label class="form-check-label" for="flexCheckDefault">
                 Filtro 3
               </label>
             </div>
@@ -105,7 +106,7 @@
           <p>Título: {{poema.Titulo}}</p>
         </div>
         <div>
-          <p>Autor: nombres</p>
+          <p>Autor: {{poema.Autor.Nombre}}</p>
         </div>
         <div class="d-flex">
           <p>{{poema.Puntaje}}</p>

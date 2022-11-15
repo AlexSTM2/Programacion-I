@@ -65,11 +65,11 @@ class Poema(db.Model):
     def to_json_public(self):
 
         poema_json = {
-            "Autor:" : self.usuario.nombre,
-            "Titulo:" : self.titulo,
-            "Fecha:" : str(self.fecha.strftime("%d-%m-%Y")), 
-            "Puntaje:" : self.promedio_nota(),
-            "Cantidad de calificaciones:" : len(self.calificaciones)
+            "Autor" : self.usuario.nombre,
+            "Titulo" : self.titulo,
+            "Fecha" : str(self.fecha.strftime("%d-%m-%Y")), 
+            "Puntaje" : self.promedio_nota(),
+            "Cantidad de calificaciones" : len(self.calificaciones)
         }
         return poema_json
 

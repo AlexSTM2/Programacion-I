@@ -12,15 +12,16 @@
     <nav class="nav d-flex justify-content-between">
       <div class="d-flex justify-content-center">
         <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.subir_poema')}}">Subir poema</a>
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/mi-perfil">Mi perfil</a>
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/mis-poemas">Mis poemas</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="/mi_perfil">Mi perfil</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="/mis_poemas">Mis poemas</a>
       </div>
       <div style="text-align: center;">
-        <a class="flex-sm-fill text-sm-center nav-link foro" aria-current="page" href="{{url_for('main.index_usr')}}">Foro de poemas</a>
+        <a class="flex-sm-fill text-sm-center nav-link foro" aria-current="page" href="/usr">Foro de poemas</a>
       </div>
-      <div class="usuario">
-        <p class="flex-sm-fill text-sm-center links">{{usuario.Nombre}}</p>
-      </div>
+        <div class="usuario d-flex">
+          <p class="flex-sm-fill text-sm-center links">{{usuario.Nombre}}</p>
+          <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.logout')}}">Logout</a>
+        </div>
     </nav>
   </header>
   <br>

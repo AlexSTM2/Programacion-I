@@ -30,13 +30,6 @@ def obtener_poemas(jwt = None, page=1, per_page=5):
     return requests.get(api_url, json=data, headers=headers)
 
 
-#Obtengo los datos del usuario.
-def info_usuario(id):
-    api_url = f'{current_app.config["API_URL"]}/usuario/{id}'
-    headers = obtener_headers()
-    return requests.get(api_url, headers=headers)
-
-
 #Obtener un usuario en especifico.
 def obtener_usuario(id):
     api_url = f'{current_app.config["API_URL"]}/usuario/{id}'
@@ -54,14 +47,27 @@ def obtener_nombre(id_usuario):
 
 
 
-#Obtener las calificaciones
+#Obtener las calificaciones por poema
 def calificaciones_poema(id):
     api_url = f'{current_app.config["API_URL"]}/calificaciones'
 
     data = {"ID_Poema": id}
-    headers = obtener_headers()
+    headers = obtener_headers(without_token = True)
     return requests.get(api_url, json = data, headers = headers)
 
+def obtener_mis_calificaciones(id):
+
+    api_url = f'{current_app.config["API_URL"]}/calificaciones'
+    headers = obtener_headers(without_token=True)
+    data = {'ID_Usuario': int(id)}
+    return requests.get(api_url,json=data,headers = headers)
+
+def obtener_calificacion(id):
+
+    api_url = f'{current_app.config["API_URL"]}/calificacion/{id}'
+    headers = obtener_headers(without_token=True)
+    data = {'id': int(id)}
+    return requests.get(api_url,json=data,headers = headers)
 
 #Obtengo el json txt.
 def json_load(response):

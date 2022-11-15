@@ -19,10 +19,10 @@ class Poema(Resource):
                 return poema.to_json()
             else:
                 poema = db.session.query(ModeloPoema).get_or_404(id)
-                return poema.to_json_public()
+                return poema.to_json()
         else:
             poema = db.session.query(ModeloPoema).get_or_404(id)
-            return poema.to_json_public()
+            return poema.to_json()
 
     @jwt_required()           
     def delete(self, id):
@@ -106,7 +106,7 @@ class Poemas(Resource):
                 'Páginas': poemas.pages, 
                 "Página" : page})
         else:
-            return jsonify({'Poemas':[poema.to_json_public() for poema in poemas.items],
+            return jsonify({'Poemas':[poema.to_json() for poema in poemas.items],
             'Total' : poemas.total, 
             'Páginas': poemas.pages, 
             "Página" : page})

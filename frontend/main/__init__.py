@@ -5,7 +5,7 @@ from main.routes import routes
 from dotenv import load_dotenv
 from flask_login import LoginManager, login_required
 
-login_manager = LoginManager()
+#login_manager = LoginManager()
 
 #Mètodo que inicializa todos los mòdulos
 def create_app():

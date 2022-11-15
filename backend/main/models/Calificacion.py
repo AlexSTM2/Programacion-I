@@ -27,17 +27,19 @@ class Calificacion(db.Model):
             "Puntaje" : int(self.puntaje) ,
             "Comentario" : str(self.comentario),
             "Usuario" : self.usuario.nombre,
-            "ID_Poema" : self.poema_id
+            "ID_Poema" : self.poema_id,
+            "ID_Usuario" : self.usuario_id
         }
         return calificacion_json
 
     def to_json_public(self):
         calificacion_json = {
-            "Usuario: " : self.usuario.nombre,
-            "Poema: " : self.poema.titulo,
-            "Puntaje: " : int(self.puntaje),
-            "Comentario: " : str(self.comentario)
+            "Usuario" : self.usuario.nombre,
+            "Poema" : self.poema.titulo,
+            "Puntaje" : int(self.puntaje),
+            "Comentario" : str(self.comentario)
         }
+        
         return calificacion_json
 
     def to_json_short(self):

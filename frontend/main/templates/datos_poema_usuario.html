@@ -12,14 +12,15 @@
     <nav class="nav d-flex justify-content-between">
       <div class="d-flex justify-content-center">
         <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.subir_poema')}}}">Subir poema</a>
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/mi-perfil">Mi perfil</a>
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/mis-poemas">Mis poemas</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="/mi_perfil">Mi perfil</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="/mis_poemas">Mis poemas</a>
       </div>
       <div style="text-align: center;">
         <a class="flex-sm-fill text-sm-center nav-link foro" aria-current="page" href="/usr">Foro de poemas</a>
       </div>
-      <div class="usuario">
+      <div class="usuario d-flex">
         <p class="flex-sm-fill text-sm-center links">{{usuario.Nombre}}</p>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.logout')}}">Logout</a>
       </div>
     </nav>
   </header>
@@ -44,7 +45,7 @@
         </div>
     </div>
     <br>
-    <a href="/calificar" style="margin: 2px;"  class="btn btn-primary">Calificar</a>
+    <a href="/calificar/{{poema.ID_Poema}}" style="margin: 2px;"  class="btn btn-primary">Calificar</a>
     <br>
     <br>
     <div class="d-flex">
@@ -62,7 +63,7 @@
               <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
             </div>
             <div>
-              <a href="/ver-calif-usuario" class="btn btn-outline-primary">Ver más</a>
+              <a href="/ver_calif_usuario/{{poema.ID_Poema}}/{{calificacion.ID_Calificacion}}" class="btn btn-outline-primary">Ver más</a>
             </div>
           </div>
       </div>

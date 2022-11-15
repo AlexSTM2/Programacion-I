@@ -11,14 +11,15 @@
   <header class="header1">
     <nav class="nav d-flex justify-content-between">
       <div class="d-flex justify-content-center">
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/mi-perfil">Mi perfil</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.mi_perfil')}}">Mi perfil</a>
         <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.mis_poemas')}}">Mis poemas</a>
       </div>
       <div style="text-align: center;">
         <a class="flex-sm-fill text-sm-center nav-link foro" aria-current="page" href="{{url_for('main.index_usr')}}">Foro de poemas</a>
       </div>
-      <div class="usuario">
+      <div class="usuario d-flex">
         <p class="flex-sm-fill text-sm-center links">{{usuario.Nombre}}</p>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.logout')}}">Logout</a>
       </div>
     </nav>
   </header>

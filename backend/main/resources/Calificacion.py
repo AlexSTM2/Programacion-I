@@ -18,10 +18,10 @@ class Calificacion(Resource):
                 return calificacion.to_json()
             else:
                 calificacion = db.session.query(ModeloCalificacion).get_or_404(id)
-                return calificacion.to_json_public()
+                return calificacion.to_json()
         else:
             calificacion = db.session.query(ModeloCalificacion).get_or_404(id)
-            return calificacion.to_json_public()
+            return calificacion.to_json()
     
     @jwt_required()
     def delete(self, id):
@@ -56,17 +56,21 @@ class Calificaciones(Resource):
     #Obtener lista de recursos
     @jwt_required(optional=True)
     def get(self):
-        claims = get_jwt()
-        if "rol" in claims:
-            if claims["rol"] == "admin":
-                calificaciones = db.session.query(ModeloCalificacion).all()
-                return jsonify([calificacion.to_json() for calificacion in calificaciones])
-            else:
-                calificaciones = db.session.query(ModeloCalificacion).all()
-                return jsonify([calificacion.to_json_public() for calificacion in calificaciones])    
-        else:
-            calificaciones = db.session.query(ModeloCalificacion).all()
-            return jsonify([calificacion.to_json_public() for calificacion in calificaciones])
+        if request.get_json():
+            filtros = request.get_json().items()
+            for key, value in filtros:
+                if key == "ID_Usuario":
+                    return self.calificaciones_usuario(value)
+                else:
+                    calificaciones = db.session.query(ModeloCalificacion),all()
+                    return jsonify([calificacion.to_json() for calificacion in calificaciones])
+
+
+                    
+    def calificaciones_usuario(self, id):
+        calificaciones = db.session.query(ModeloCalificacion)
+        calificaciones = calificaciones.filter(ModeloCalificacion.usuario.has(ModeloUsuario.id == id)).all()
+        return jsonify([calificacion.to_json() for calificacion in calificaciones])
 
     #Insertar recurso
     @jwt_required()
@@ -77,7 +81,7 @@ class Calificaciones(Resource):
         usuario_califica = db.session.query(ModeloUsuario).get(id_usuario)
         claims = get_jwt()
         if "rol" in claims:
-            if claims['rol'] == "Poeta":
+            if claims['rol'] == "Poeta" or "admin":
                 try:
                     calificacion.usuario_id = int(id_usuario)
                     db.session.add(calificacion)
