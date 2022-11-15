@@ -12,35 +12,33 @@
     <nav class="nav d-flex justify-content-between">
       <div class="d-flex justify-content-center">
         <a class="flex-sm-fill text-sm-center nav-link links" href="/mi-perfil">Mi perfil</a>
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/mis-poemas">Mis poemas</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.mis_poemas')}}">Mis poemas</a>
       </div>
       <div style="text-align: center;">
-        <a class="flex-sm-fill text-sm-center nav-link foro" aria-current="page" href="/usr">Foro de poemas</a>
+        <a class="flex-sm-fill text-sm-center nav-link foro" aria-current="page" href="{{url_for('main.index_usr')}}">Foro de poemas</a>
       </div>
       <div class="usuario">
-        <p class="flex-sm-fill text-sm-center links">Usuario</p>
+        <p class="flex-sm-fill text-sm-center links">{{usuario.Nombre}}</p>
       </div>
     </nav>
   </header>
   <br>
-    <div class="d-flex">
-        <div>
-            <div class="mb-3">
-                <input type="email" class="form-control links" id="exampleFormControlInput1" placeholder="Ingrese el título">
-              </div>
-        </div>
-    </div>
-    <br>
+  <br>
     </div>
     <br>
     <div>
-      <div class="mb-3">
-        <textarea class="form-control links" id="exampleFormControlTextarea1" rows="5" placeholder="Texto del poema"></textarea>
-      </div>
-    </div>
-    <br>
-    <br>
-    <a style="margin: 2px; ;" href="/usr" class="btn btn-primary">Volver al inicio</a>
-    <button style="margin: 2px; ;" type="button" class="btn btn-primary">Subir poema</button>
+        <form action="{{url_for('main.subir_poema')}}" method="POST" id="form_poema">
+          <div class="d-flex">
+              <div class="mb-3">
+                  <input name="titulo" type="titulo" class="form-control links" id="exampleFormControlInput1" placeholder="Ingrese el título">
+              </div>
+          </div>
+          <textarea form="form_poema" class="form-control links" id="exampleFormControlTextarea1" rows="5" placeholder="Texto del poema" name="form_poema"></textarea>
+          <br>
+          <br>
+          <a style="margin: 2px; ;" href="/usr" class="btn btn-primary">Volver al inicio</a>
+          <button style="margin: 2px; ;" type="submit" class="btn btn-primary">Subir poema</button>
+        </form>
+    </div>  
 </body>
 </html>

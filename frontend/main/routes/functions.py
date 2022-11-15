@@ -1,7 +1,8 @@
 from flask import request, current_app, url_for, redirect
 import requests, json
 
-def obtener_poemas_id(id, page = 1, per_page = 5):
+def obtener_poemas_id(id, page = 1, per_page = 10):
+
     api_url = f'{current_app.config["API_URL"]}/poemas'
     data = {"page": page, "per_page": per_page, "usuario_id": id}
     headers = obtener_headers(without_token = True)

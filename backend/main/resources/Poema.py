@@ -123,8 +123,8 @@ class Poemas(Resource):
         claims = get_jwt()
 
         if "rol" in claims:
-            if claims["rol"] == "Poeta":
-                if len(usuario.poemas) == 0 or len(usuario.calificaciones) >= 2:
+            if claims["rol"] == "Poeta" or claims["rol"] == "admin":
+                if len(usuario.poemas) == 0 or len(usuario.calificaciones) >= 0:
                     poema.usuario_id = id_usuario
                     db.session.add(poema)
                     db.session.commit()

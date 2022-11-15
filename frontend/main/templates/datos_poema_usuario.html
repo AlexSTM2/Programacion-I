@@ -11,7 +11,7 @@
   <header class="header1">
     <nav class="nav d-flex justify-content-between">
       <div class="d-flex justify-content-center">
-        <a class="flex-sm-fill text-sm-center nav-link links" href="/subir-poema">Subir poema</a>
+        <a class="flex-sm-fill text-sm-center nav-link links" href="{{url_for('main.subir_poema')}}}">Subir poema</a>
         <a class="flex-sm-fill text-sm-center nav-link links" href="/mi-perfil">Mi perfil</a>
         <a class="flex-sm-fill text-sm-center nav-link links" href="/mis-poemas">Mis poemas</a>
       </div>
@@ -68,7 +68,7 @@
       </div>
     {% endfor %}
     <br>
-    <a href="/usr" style="margin: 2px; ;" class="btn btn-primary">Volver al inicio</a>
+    <a href="{{url_for('main.index_usr')}}" style="margin: 2px; ;" class="btn btn-primary">Volver al inicio</a>
     <br>
     <br>
     <br>
