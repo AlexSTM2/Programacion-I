@@ -87,3 +87,8 @@
 .text_color{
     color: blueviolet;
 }
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+}

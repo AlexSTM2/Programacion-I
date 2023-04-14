@@ -46,10 +46,12 @@ class Usuario(Resource):
         if claims['rol'] == "admin" or id_usuario == int(id):
             
             usuario = db.session.query(ModeloUsuario).get_or_404(id)
-            data = request.get_json().items()
-            for key, value in data:
-                setattr(usuario, key, value)
-            db.session.add(usuario)
+            usuario.nombre = request.json['nombre']
+            usuario.email = request.json['email']
+            usuario.contraseña = request.json['contraseña']
+            # data = request.get_json().items()
+            # for key, value in data:
+            #     setattr(usuario, key, value)
             db.session.commit()
             return usuario.to_json(), 201
         else:

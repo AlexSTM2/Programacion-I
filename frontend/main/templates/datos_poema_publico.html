@@ -20,58 +20,44 @@
   <br>
   <div class="d-flex">
     <div>
-        <p class="links">Título del poema: Poema</p>
+        <p class="links">Título del poema: {{poema.Titulo}}</p>
     </div>
     <div>
-        <p class="links">Autor: Alexis</p>
+        <p class="links">Autor: {{poema.Autor.Nombre}}</p>
     </div>
     <div>
-        <p class="links">Fecha: 22/10/2022</p>
+        <p class="links">Fecha: {{poema.Fecha}}</p>
     </div>
   </div>
   <br>
   <div>
     <div class="d-flex justify-content-center">
         <div class="caja_texto">
-            <p style="text-align:center;">Cuerpo del poema</p>
+            <p style="text-align:center;">{{poema.Cuerpo}}</p>
         </div>
     </div>
   </div>
   <br>
   <div class="d-flex">
     <p class="links">Lista de calificaciones</p>
-  </div>
-  <br>
+</div>
+<br>
+{% for calificacion in poema.Calificaciones %}
   <div class="caja_calificaciones">
-    <div class="d-flex justify-content-evenly">
-      <div>
-        <p>Calificador: Alexis</p>
+      <div class="d-flex justify-content-evenly">
+        <div>
+          <p>Calificador: {{calificacion.Usuario}}</p>
+        </div>
+        <div class="d-flex">
+          <p>Calificación: {{calificacion.Puntaje}}</p>
+          <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
+        </div>
+        <div>
+          <a href="/ver_calif_usuario/{{poema.ID_Poema}}/{{calificacion.ID_Calificacion}}" class="btn btn-outline-primary">Ver más</a>
+        </div>
       </div>
-      <div class="d-flex">
-        <p>Calificación: 5 </p>
-        <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
-      </div>
-      <div>
-        <a href="/ver-calif-publico" class="btn btn-outline-primary">Ver más</a>
-      </div>
-    </div>
   </div>
-  <div class="caja_calificaciones">
-    <div class="d-flex justify-content-evenly">
-      <div>
-        <p>Calificador: Alexis</p>
-      </div>
-      <div class="d-flex">
-        <p>Calificación: 5 </p>
-        <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
-      </div>
-      <div>
-        <a href="/ver-calif-publico" class="btn btn-outline-primary">Ver más</a>
-      </div>
-    </div>
-  </div>
-  <br>
-  <a href="/" style="margin: 2px; ;" class="btn btn-primary">Volver al inicio</a>
+{% endfor %}
   <br>
   <br>
   <br>

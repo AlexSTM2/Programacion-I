@@ -12,13 +12,13 @@
     <header class="header1">
         <nav class="nav d-flex justify-content-between">
             <div>
-              <a class="flex-sm-fill text-sm-center nav-link links" href="/mi-perfil">Mi perfil</a>
+              <a class="flex-sm-fill text-sm-center nav-link links" href="/mi_perfil">Mi perfil</a>
             </div>
             <div class="ajuste_foro_perfil">
               <a class="flex-sm-fill text-sm-center nav-link foro" aria-current="page" href="/usr">Foro de poemas</a>
             </div>
             <div class="usuario">
-              <p class="flex-sm-fill text-sm-center links">Usuario</a>
+              <p class="flex-sm-fill text-sm-center links">{{usuario.Nombre}}</a>
             </div>
         </nav>
     </header>
@@ -31,16 +31,18 @@
 
     <div class="d-flex">
         <div class="d-flex flex-column">
-            <input class="form-control links" type="text" placeholder="Nuevo nombre" aria-label="default input example">
-            <input class="form-control links" type="text" placeholder="Nuevo email" aria-label="default input example">
-            <input class="form-control links" type="text" placeholder="Contraseña actual" aria-label="default input example">
-            <input class="form-control links" type="text" placeholder="Nueva contraseña" aria-label="default input example">
+            <form action="{{url_for('main.modif_perfil')}}" method="POST" id="form_edit">
+            <input class="form-control links" type="nombre" placeholder="Nuevo nombre" name="nombre">
+            <input class="form-control links" type="email" placeholder="Nuevo email" name="email">
+            <input class="form-control links" type="contraseña_actual" placeholder="Contraseña actual" name="contraseña_actual">
+            <input class="form-control links" type="contraseña" placeholder="Nueva contraseña" name="contraseña">
             <br>
             <br>
             <div class="d-flex justify-content-between">
                 <a href="/usr" class="btn btn-primary ajuste_boton">Volver al inicio</a>
-                <button type="button" class="btn btn-primary ajuste_boton">Guardar datos</button>
+                <button type="submit" class="btn btn-primary ajuste_boton">Guardar datos</button>
             </div>
+            </form>
         </div>
     </div> 
 </body>

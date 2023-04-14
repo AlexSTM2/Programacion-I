@@ -7,20 +7,25 @@ app = Blueprint('main', __name__, url_prefix= '/')
 
 @app.route('/')
 def index():
-    return render_template('menu_principal.html')
+    resp = f.obtener_poemas()
+    poemas = f.obtener_json(resp)
+    lista_poemas = poemas["Poemas"]
+    return render_template('menu_principal.html', poemas = lista_poemas)
 
 
 @app.route('/usr')
 def index_usr(jwt = None):
     if jwt == None:
-        jwt = f.obtener_jwt()
-        
-    resp = f.obtener_poemas(jwt=jwt)
-    poemas = f.obtener_json(resp)
-    lista_poemas = poemas["Poemas"]
-    usuario = f.obtener_usuario(f.obtener_id())
-    usuario = json.loads(usuario.text)
-    return render_template('menu_principal_usuario.html', poemas = lista_poemas, jwt = jwt, usuario = usuario)
+        jwt = f.obtener_jwt()  
+    if jwt != None and jwt != TypeError("Token has expired"):
+        usuario = f.obtener_usuario(f.obtener_id())
+        usuario = f.obtener_json(usuario)
+        resp = f.obtener_poemas()
+        poemas = f.obtener_json(resp)
+        lista_poemas = poemas["Poemas"]
+        return render_template('menu_principal_usuario.html', poemas = lista_poemas, jwt = jwt, usuario = usuario)
+    else:
+        return redirect(url_for('main.index'))
 
 @app.route('/login', methods = ["GET", "POST"])
 def login():
@@ -39,7 +44,7 @@ def login():
                 token = response["Token de acceso"]
                 usuario_id = str(response["ID Usuario"])
 
-                resp = make_response(index_usr(jwt=token))
+                resp = redirect(url_for('main.index_usr'))
                 resp.set_cookie("Token de acceso", token)
                 resp.set_cookie("ID Usuario", usuario_id)
 
@@ -51,23 +56,30 @@ def login():
 
 @app.route("/logout")
 def logout():
-    resp = make_response(redirect(url_for("main.index")))
-    resp.delete_cookie("Token de acceso")
-    resp.delete_cookie("ID Usuario")
-    return resp
+    jwt = f.obtener_jwt()
+    if jwt == None or TypeError("Token has expired"):
+        return redirect(url_for('main.index'))
+    else:
+        resp = make_response(redirect(url_for("main.index")))
+        resp.delete_cookie("Token de acceso")
+        resp.delete_cookie("ID Usuario")
+        return resp
 
-@app.route('/ver-poema')
-def ver_poema_publico():
-    return render_template('datos_poema_publico.html')
+@app.route('/ver-poema/<int:id>')
+def ver_poema(id):
+    resp = f.obtener_poema(id)
+    poema = f.obtener_json(resp)
+    print("Datos del autor: ", poema)
+    return render_template('datos_poema_publico.html', poema=poema)
 
 @app.route('/ver-poema-usuario/<int:id>')
 def ver_poema_usuario(id):
     jwt = f.obtener_jwt()
-    if jwt == None:
-        return redirect(url_for('main.login'))
+    if jwt == None: #NameError("Token has expired"):
+        return redirect(url_for('main.index'))
     else:
         usuario = f.obtener_usuario(f.obtener_id())
-        usuario = json.loads(usuario.text)
+        usuario = f.obtener_json(usuario)
         resp = f.obtener_poema(id)
         poema = f.obtener_json(resp)
         return render_template('datos_poema_usuario.html', poema = poema, usuario=usuario)
@@ -80,24 +92,27 @@ def ver_calif_publico():
 @app.route('/ver_calif_usuario/<int:id>/<int:id_calif>')
 def ver_calif_usuario(id, id_calif):
     jwt = f.obtener_jwt()
-    poema = f.obtener_poema(id)
-    poema = f.obtener_json(poema)
-    id_usuario = f.obtener_id()
-    usuario = f.obtener_usuario(id_usuario)
-    usuario = f.obtener_json(usuario)
-    calif = f.obtener_calificacion(id_calif)
-    calif = f.obtener_json(calif)
-    return render_template('ver_calif_usuario.html', usuario = usuario, poema = poema, calificacion = calif)
+    if jwt != None:
+        poema = f.obtener_poema(id)
+        poema = f.obtener_json(poema)
+        id_usuario = f.obtener_id()
+        usuario = f.obtener_usuario(id_usuario)
+        usuario = f.obtener_json(usuario)
+        calif = f.obtener_calificacion(id_calif)
+        calif = f.obtener_json(calif)
+        return render_template('ver_calif_usuario.html', usuario = usuario, poema = poema, calificacion = calif)
+    else:
+        return redirect(url_for('main.index'))
 
 @app.route('/subir_poema', methods = ["GET", "POST"])
 def subir_poema():
 
     jwt = f.obtener_jwt()
-    id = f.obtener_id()
-    usuario = f.obtener_usuario(id)
-    usuario = json.loads(usuario.text)
 
     if jwt:
+        id = f.obtener_id()
+        usuario = f.obtener_usuario(id)
+        usuario = f.obtener_json(usuario)
         if(request.method == "POST"):
             titulo = request.form.get("titulo")
             cuerpo = request.form.get("form_poema")
@@ -107,55 +122,52 @@ def subir_poema():
                 response = requests.post(f'{current_app.config["API_URL"]}/poemas', json=data, headers=headers)
                 
                 if response.ok:
-                    resp = make_response(redirect(url_for('main.mis_poemas')))
+                    resp = redirect(url_for('main.mis_poemas'))
                     return resp
             else:
                 return render_template("subir_poema.html")
         else:
             return render_template("subir_poema.html", usuario = usuario)
     else:    
-        resp = make_response(redirect(url_for('main.index')))
-        return resp
+        return redirect(url_for('main.index'))
+
 
 @app.route('/mi_perfil')
 def mi_perfil():
 
     jwt = f.obtener_jwt()
-    usuario = f.obtener_usuario(f.obtener_id())
-    usuario = json.loads(usuario.text)
-    
     if jwt:
+        usuario = f.obtener_usuario(f.obtener_id())
+        usuario = f.obtener_json(usuario)
         return render_template("mi_perfil.html", usuario = usuario)
     else:
-        resp = make_response(index())
-        return resp
+        return redirect(url_for('main.index'))
     
 
 
 @app.route('/mis_poemas')
 def mis_poemas():
     jwt = f.obtener_jwt()
-    id = f.obtener_id()
-    usuario = f.obtener_usuario(id)
-    usuario = json.loads(usuario.text)
-    poemas = f.obtener_poemas_id(id=id)
-    poemas = f.obtener_json(poemas)
-    lista_poemas = poemas["Poemas"]
     if jwt:
+        id = f.obtener_id()
+        usuario = f.obtener_usuario(id)
+        usuario = f.obtener_json(usuario)
+        poemas = f.obtener_poemas_id(id=id)
+        poemas = f.obtener_json(poemas)
+        lista_poemas = poemas["Poemas"]
         return render_template("mis_poemas.html", usuario = usuario, poemas = lista_poemas)
     else:
-        resp = make_response(redirect(url_for("main.index")))
-        return resp
+        return redirect(url_for('main.index'))
 
 @app.route('/calificar/<int:id_poema>', methods = ["GET", "POST"])
 def calificar(id_poema):
     jwt = f.obtener_jwt()
-    id = f.obtener_id()
-    usuario = f.obtener_usuario(id)
-    usuario = json.loads(usuario.text)
-    poema = f.obtener_poema(id_poema)
-    poema = f.obtener_json(poema)
     if jwt:
+        id = f.obtener_id()
+        usuario = f.obtener_usuario(id)
+        usuario = f.obtener_json(usuario)
+        poema = f.obtener_poema(id_poema)
+        poema = f.obtener_json(poema)
         if(request.method == "POST"):
             puntaje = request.form.get('check_form')
             comentario = request.form.get('form_comentario')
@@ -168,28 +180,57 @@ def calificar(id_poema):
             if response.ok:
                 resp = make_response(redirect(url_for('main.index_usr')))
                 return resp
-
-    return render_template('calificar.html', usuario = usuario, poema=poema)
+        return render_template('calificar.html', usuario = usuario, poema=poema)
+    else:
+        return redirect(url_for('main.index'))
+    
     
 
 @app.route('/modif_calif')
 def modificar_cal():
     return render_template('modificar_calif.html')
 
-@app.route('/modif_perfil')
-def modificar_perfil():
-    return render_template('modificar_mi_perfil.html')
+@app.route('/modif_perfil', methods = ['GET','POST'])
+def modif_perfil():
+    jwt = f.obtener_jwt()
+    if jwt:
+        id = f.obtener_id()
+        usuario = f.obtener_usuario(id)
+        # email_actual = request.cookies.get("Email")
+        usuario = f.obtener_json(usuario)
+        email_actual = usuario["Email"]
+    
+        if(request.method == "POST"):
+            nombre = request.form.get("nombre")
+            nuevo_email = request.form.get("email")
+            contraseña_actual = request.form.get("contraseña_actual")
+            nueva_contraseña = request.form.get("contraseña")
+            response = f.login(email_actual, contraseña_actual)
+
+            if response.ok:
+                if nombre != "" and nuevo_email != "" and nueva_contraseña != "":
+                    data = {"nombre": nombre, "email": nuevo_email, "contraseña": nueva_contraseña}
+                    headers = f.obtener_headers()
+                    response_put = requests.put(f'{current_app.config["API_URL"]}/usuario/{id}', json=data, headers=headers)
+                    if response_put.ok:
+                        return redirect(url_for('main.mi_perfil'))
+                else:
+                    return render_template('modificar_mi_perfil.html', usuario = usuario)
+
+        return render_template('modificar_mi_perfil.html', usuario = usuario)
+    else:
+        return redirect(url_for('main.index'))
 
 @app.route('mis_calif')
 def mis_calif():
     jwt = f.obtener_jwt()
-    id = f.obtener_id()
-    usuario = f.obtener_usuario(id)
-    usuario = json.loads(usuario.text)
-    calificaciones = f.obtener_mis_calificaciones(id=id)
-    calificaciones = f.obtener_json(calificaciones)
-    print("Mis calificaciones", calificaciones)
+    
     if jwt:
+        id = f.obtener_id()
+        usuario = f.obtener_usuario(id)
+        usuario = f.obtener_json(usuario)
+        calificaciones = f.obtener_mis_calificaciones(id=id)
+        calificaciones = f.obtener_json(calificaciones)
         return render_template("mis_calificaciones.html", usuario = usuario, calificaciones=calificaciones)
     else:
         return redirect(url_for("main.index"))
