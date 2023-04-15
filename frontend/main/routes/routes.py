@@ -171,7 +171,6 @@ def calificar(id_poema):
         if(request.method == "POST"):
             puntaje = request.form.get('check_form')
             comentario = request.form.get('form_comentario')
-            print(puntaje, comentario)
             if puntaje != "" and comentario != "":
                 data = {"comentario": comentario, "puntaje": puntaje, "poema_id": id_poema}
                 headers = f.obtener_headers(without_token=False)
@@ -180,15 +179,41 @@ def calificar(id_poema):
             if response.ok:
                 resp = make_response(redirect(url_for('main.index_usr')))
                 return resp
-        return render_template('calificar.html', usuario = usuario, poema=poema)
+        else:
+            return render_template('calificar.html', usuario = usuario, poema=poema)
     else:
         return redirect(url_for('main.index'))
     
     
 
-@app.route('/modif_calif')
-def modificar_cal():
-    return render_template('modificar_calif.html')
+@app.route('/modif_calif/<int:id_calif>/<int:id_poema>',  methods = ["GET", "POST"])
+def modif_calif(id_calif, id_poema, jwt = None):
+    jwt = f.obtener_jwt()
+    if jwt == None:
+        return redirect(url_for('main.index'))
+    else:  
+        usuario = f.obtener_usuario(f.obtener_id())
+        usuario = f.obtener_json(usuario)
+        poema = f.obtener_poema(id_poema)
+        poema = f.obtener_json(poema)
+        calif = f.obtener_calificacion(id_calif)
+        calif = f.obtener_json(calif)
+        if(request.method == "POST"):
+            puntaje = request.form.get('check_form')
+            comentario = request.form.get('form_comentario')
+            print(comentario, puntaje)
+            if puntaje != "" and comentario != "":
+                data = {"comentario": comentario, "puntaje": puntaje, "poema_id": id_poema}
+                headers = f.obtener_headers(without_token=False)
+                response = requests.put(f'{current_app.config["API_URL"]}/calificacion/{id_calif}', json=data, headers=headers)
+                
+            if response.ok:
+                resp = make_response(redirect(url_for('main.index_usr')))
+                return resp
+            else:
+                print(response.text)
+        else:
+            return render_template('modificar_calif.html', usuario = usuario, poema = poema, calificacion = calif)
 
 @app.route('/modif_perfil', methods = ['GET','POST'])
 def modif_perfil():

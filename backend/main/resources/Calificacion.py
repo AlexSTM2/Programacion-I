@@ -38,10 +38,10 @@ class Calificacion(Resource):
     
     @jwt_required()
     def put(self,id):
-
+        claims = get_jwt()
         id_usuario = get_jwt_identity()
         calificacion = db.session.query(ModeloCalificacion).get_or_404(id)
-        if id_usuario == calificacion.usuario_id:
+        if id_usuario == calificacion.usuario_id or claims["rol"] == "admin":
             data = request.get_json().items()
             for key, value in data:
                 setattr(calificacion, key, value)
