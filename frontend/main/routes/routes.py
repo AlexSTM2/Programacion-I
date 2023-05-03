@@ -57,7 +57,7 @@ def login():
 @app.route("/logout")
 def logout():
     jwt = f.obtener_jwt()
-    if jwt == None or TypeError("Token has expired"):
+    if jwt == None or jwt == TypeError("Token has expired"):
         return redirect(url_for('main.index'))
     else:
         resp = make_response(redirect(url_for("main.index")))
@@ -66,11 +66,16 @@ def logout():
         return resp
 
 @app.route('/ver-poema/<int:id>')
-def ver_poema(id):
-    resp = f.obtener_poema(id)
-    poema = f.obtener_json(resp)
-    print("Datos del autor: ", poema)
-    return render_template('datos_poema_publico.html', poema=poema)
+def ver_poema(id, jwt=None):
+    if jwt == None:
+        jwt = f.obtener_jwt()  
+    if jwt != None and jwt != TypeError("Token has expired"):
+        return redirect(url_for('main.ver_poema_usuario', id=id))
+    else:
+        resp = f.obtener_poema(id, without_token=True)
+        poema = f.obtener_json(resp)
+        print("Poema: ", poema)
+        return render_template('datos_poema_publico.html', poema=poema)
 
 @app.route('/ver-poema-usuario/<int:id>')
 def ver_poema_usuario(id):

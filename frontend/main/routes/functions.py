@@ -10,9 +10,9 @@ def obtener_poemas_id(id, page = 1, per_page = 10):
 
 
 #Obtengo un poema en especifico.
-def obtener_poema(id):
+def obtener_poema(id, without_token = False):
     api_url = f'{current_app.config["API_URL"]}/poema/{id}'
-    headers = obtener_headers()
+    headers = obtener_headers(without_token)
     return requests.get(api_url, headers=headers)
 
 

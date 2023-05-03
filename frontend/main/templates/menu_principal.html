@@ -92,95 +92,26 @@
     </div>
   </div>
   <br>
-  <div class="caja_poema">
-    <div class="d-flex justify-content-evenly">
-      <div>
-        <p>Título: Poema</p>
-      </div>
-      <div>
-        <p>Autor: Alexis</p>
-      </div>
-      <div class="d-flex">
-        <p>Calificación: 5 </p>
-        <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
-      </div>
-      <div>
-        <a href="/ver-poema" class="btn btn-outline-primary">Ver más</a>
-      </div>
-    </div>
-  </div>
-  <br>
-  <div class="caja_poema">
-    <div class="d-flex justify-content-evenly">
-      <div>
-        <p>Título: Poema</p>
-      </div>
-      <div>
-        <p>Autor: Alexis</p>
-      </div>
-      <div class="d-flex">
-        <p>Calificación: 5 </p>
-        <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
-      </div>
-      <div>
-        <a href="/ver-poema" class="btn btn-outline-primary">Ver más</a>
+  {% for poema in poemas %}
+    <div class="caja_poema">
+      <div class="d-flex justify-content-between">
+        <div>
+          <p>Título: {{poema.Titulo}}</p>
+        </div>
+        <div>
+          <p>Autor: {{poema.Autor.Nombre}}</p>
+        </div>
+        <div class="d-flex">
+          <p>{{poema.Puntaje}}</p>
+          <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
+        </div>
+        <div>
+          <a href="/ver-poema/{{poema.ID_Poema}}" class="btn btn-outline-primary">Ver más</a>
+        </div>
       </div>
     </div>
-  </div>
-  <br>
-  <div class="caja_poema">
-    <div class="d-flex justify-content-evenly">
-      <div>
-        <p>Título: Poema</p>
-      </div>
-      <div>
-        <p>Autor: Alexis</p>
-      </div>
-      <div class="d-flex">
-        <p>Calificación: 5 </p>
-        <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
-      </div>
-      <div>
-        <a href="/ver-poema" class="btn btn-outline-primary">Ver más</a>
-      </div>
-    </div>
-  </div>
-  <br>
-  <div class="caja_poema">
-    <div class="d-flex justify-content-evenly">
-      <div>
-        <p>Título: Poema</p>
-      </div>
-      <div>
-        <p>Autor: Alexis</p>
-      </div>
-      <div class="d-flex">
-        <p>Calificación: 5 </p>
-        <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
-      </div>
-      <div>
-        <a href="/ver-poema" class="btn btn-outline-primary">Ver más</a>
-      </div>
-    </div>
-  </div>
-  <br>
-  <div class="caja_poema">
-    <div class="d-flex justify-content-evenly">
-      <div>
-        <p>Título: Poema</p>
-      </div>
-      <div>
-        <p>Autor: Alexis</p>
-      </div>
-      <div class="d-flex">
-        <p>Calificación: 5 </p>
-        <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
-      </div>
-      <div>
-        <a href="/ver-poema" class="btn btn-outline-primary">Ver más</a>
-      </div>
-    </div>
-  </div>
+    <br>
+    {% endfor %}
 
   <br>
   <br>
