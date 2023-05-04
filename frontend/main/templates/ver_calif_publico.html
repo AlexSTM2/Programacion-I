@@ -21,23 +21,23 @@
   <br>
   <div class="d-flex">
     <div>
-        <p class="links">Título del poema: Poema</p>
+        <p class="links">Título del poema: {{poema.Titulo}}</p>
     </div>
     <div>
-        <p class="links">Autor: Alexis</p>
+        <p class="links">Autor: {{poema.Autor.Nombre}}</p>
     </div>
     <div>
-        <p class="links">Fecha: 22/10/2022</p>
+        <p class="links">Fecha: {{poema.Fecha}}</p>
     </div>
   </div>
   <br>
   <div class="caja_calificaciones">
     <div class="d-flex justify-content-evenly">
       <div>
-        <p>Calificador: Alexis</p>
+        <p>Calificador: {{calificacion.Usuario}}</p>
       </div>
       <div class="d-flex">
-        <p>Calificación: 5 </p>
+        <p>Calificación: {{calificacion.Puntaje}} </p>
         <img class="estrella" src="/static/img/estrella.png" width="30px" height="25px">
       </div>
     </div>
@@ -46,7 +46,7 @@
   <div>
     <div class="d-flex justify-content-center">
         <div class="caja_texto">
-            <p style="text-align:center;">Comentario</p>
+            <p style="text-align:center;">{{calificacion.Comentario}}</p>
         </div>
     </div>
   </div>

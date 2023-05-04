@@ -21,6 +21,11 @@
     </nav>
   </header>
   <br>
+    {% if error %}
+    <div class="alert alert-warning" role="alert">
+      {{error}}
+    </div>
+    {% endif %}
     <div class="d-flex">
         <div>
             <p class="links">Título del poema: {{poema.Titulo}}</p>
