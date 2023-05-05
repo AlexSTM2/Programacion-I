@@ -7,10 +7,12 @@ app = Blueprint('main', __name__, url_prefix= '/')
 
 @app.route('/')
 def index():
-    resp = f.obtener_poemas()
+    pagina = request.args.get('pagina', 1, type=int) # obtener el valor de "page" de la URL
+    resp = f.obtener_poemas(page=pagina)
     poemas = f.obtener_json(resp)
     lista_poemas = poemas["Poemas"]
-    return render_template('menu_principal.html', poemas = lista_poemas)
+    paginacion = f.paginacion(poemas["Páginas"])
+    return render_template('menu_principal.html', poemas = lista_poemas, paginacion = paginacion)
 
 
 @app.route('/usr')

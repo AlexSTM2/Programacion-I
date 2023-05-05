@@ -1,7 +1,7 @@
 from flask import request, current_app, url_for, redirect
 import requests, json
 
-def obtener_poemas_id(id, page = 1, per_page = 10):
+def obtener_poemas_id(id, page = 1, per_page = 5):
 
     api_url = f'{current_app.config["API_URL"]}/poemas'
     data = {"page": page, "per_page": per_page, "usuario_id": id}
@@ -29,6 +29,12 @@ def obtener_poemas(jwt = None, page=1, per_page=5):
 
     return requests.get(api_url, json=data, headers=headers)
 
+#obtengo la cantidad de páginas en una lista
+def paginacion(paginas):
+    paginacion = []
+    for i in range(1, paginas + 1):
+        paginacion.append(i)
+    return paginacion
 
 #Obtener un usuario en especifico.
 def obtener_usuario(id):
