@@ -1,0 +1,1 @@
+<h1 align="center">How it works</h1>

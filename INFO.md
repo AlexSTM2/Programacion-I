@@ -6,7 +6,7 @@
 ## Some of the features we have:
 - User login.
   - Email and password authentication.
-- Poem creation.
+- Poem creation :pencil2:.
 - Rating system for poems.
   - Comments on poems.
   - Editing your own comments.
@@ -23,5 +23,7 @@
 ---
 
 <h2 align="center">Contact information</h2>
-[Instagram](owo.com)
+
+*  [Instagram](https://www.instagram.com/alex.linoo/)
+*  [Twitter](https://twitter.com/AlexisLino19)
 
