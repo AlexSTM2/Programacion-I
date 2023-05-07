@@ -25,7 +25,8 @@ def index_usr(jwt = None):
         resp = f.obtener_poemas()
         poemas = f.obtener_json(resp)
         lista_poemas = poemas["Poemas"]
-        return render_template('menu_principal_usuario.html', poemas = lista_poemas, jwt = jwt, usuario = usuario)
+        paginacion = f.paginacion(poemas["Páginas"])
+        return render_template('menu_principal_usuario.html', poemas = lista_poemas, jwt = jwt, usuario = usuario, paginacion = paginacion)
     else:
         return redirect(url_for('main.index'))
 
@@ -123,10 +124,10 @@ def ver_calif_usuario(id, id_calif):
 
 @app.route('/subir_poema', methods = ["GET", "POST"])
 def subir_poema():
-
     jwt = f.obtener_jwt()
-
-    if jwt:
+    if jwt == None or jwt == TypeError("Token has expired"):
+        return redirect(url_for('main.index'))
+    else:
         id = f.obtener_id()
         usuario = f.obtener_usuario(id)
         usuario = f.obtener_json(usuario)
@@ -145,15 +146,13 @@ def subir_poema():
                 return render_template("subir_poema.html")
         else:
             return render_template("subir_poema.html", usuario = usuario)
-    else:    
-        return redirect(url_for('main.index'))
 
 
 @app.route('/mi_perfil')
 def mi_perfil():
 
     jwt = f.obtener_jwt()
-    if jwt:
+    if jwt != None and jwt != TypeError("Token has expired"):
         usuario = f.obtener_usuario(f.obtener_id())
         usuario = f.obtener_json(usuario)
         return render_template("mi_perfil.html", usuario = usuario)
@@ -165,7 +164,7 @@ def mi_perfil():
 @app.route('/mis_poemas')
 def mis_poemas():
     jwt = f.obtener_jwt()
-    if jwt:
+    if jwt != None and jwt != TypeError("Token has expired"):
         id = f.obtener_id()
         usuario = f.obtener_usuario(id)
         usuario = f.obtener_json(usuario)
@@ -179,7 +178,7 @@ def mis_poemas():
 @app.route('/calificar/<int:id_poema>', methods = ["GET", "POST"])
 def calificar(id_poema):
     jwt = f.obtener_jwt()
-    if jwt:
+    if jwt != None and jwt != TypeError("Token has expired"):
         id = f.obtener_id()
         usuario = f.obtener_usuario(id)
         usuario = f.obtener_json(usuario)
@@ -210,7 +209,7 @@ def calificar(id_poema):
 @app.route('/modif_calif/<int:id_calif>/<int:id_poema>',  methods = ["GET", "POST"])
 def modif_calif(id_calif, id_poema, jwt = None):
     jwt = f.obtener_jwt()
-    if jwt == None:
+    if jwt == None or jwt == TypeError("Token has expired"):
         return redirect(url_for('main.index'))
     else:  
         usuario = f.obtener_usuario(f.obtener_id())
@@ -239,7 +238,7 @@ def modif_calif(id_calif, id_poema, jwt = None):
 @app.route('/modif_perfil', methods = ['GET','POST'])
 def modif_perfil():
     jwt = f.obtener_jwt()
-    if jwt:
+    if jwt != None and jwt != TypeError("Token has expired"):
         id = f.obtener_id()
         usuario = f.obtener_usuario(id)
         # email_actual = request.cookies.get("Email")
@@ -271,7 +270,7 @@ def modif_perfil():
 def mis_calif():
     jwt = f.obtener_jwt()
     
-    if jwt:
+    if jwt != None and jwt != TypeError("Token has expired"):
         id = f.obtener_id()
         usuario = f.obtener_usuario(id)
         usuario = f.obtener_json(usuario)
