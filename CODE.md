@@ -37,5 +37,37 @@ Here i determine how the data is going to be stored and how the user is going to
 
 
 # Frontend
-This is the main structure of my frontend:
-![front-main](https://media.discordapp.net/attachments/590886683780579338/1107390798288396308/image.png?width=960&height=237)
+* This is the main structure of my frontend:
+![front-main](https://i.imgur.com/qsJvTdD.png)
+
+## App
+* This is the main app, where i register the routes.
+![Imgur](https://i.imgur.com/4IIZQAa.png)
+
+## Routes
+* In the routes, i make the requests to the backend, and render the templates. For example, this is the route that renders the main page, for a user that is not logged in:
+![Imgur](https://i.imgur.com/AtdxiJy.png)
+![Imgur](https://i.imgur.com/Ox8mUct.png)
+
+### Functions
+* I made a group of functions that i use in the routes, to make the code more readable. For example, this is the function that i use to get the poems from the database, using the user id:
+![Imgur](https://i.imgur.com/l9JNp66.png)
+
+* There are a lots of functions like this one, because i need them to make the requests of everything to the database.
+
+## Templates
+* These are all the templates i use for my poems website:
+![Imgur](https://i.imgur.com/MfJIjwh.png)
+
+* I usea a Jinja2 template engine, using a "base.html" as the base of all the templates. That helps to all the other templates to be less repetitive, and to make a better code structure.
+![Imgur](https://i.imgur.com/MFMsYkm.png)
+
+* This is how i call the base template in the other templates:
+![Imgur](https://i.imgur.com/bZfveEp.png)
+
+## Static
+* This is the static folder, where i store all the static files of the website:
+![Imgur](https://i.imgur.com/A2qyWKu.png)
+
+* This are the css file i use to style the website:
+![Imgur](https://i.imgur.com/A2qyWKu.png)
