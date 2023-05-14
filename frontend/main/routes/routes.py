@@ -7,6 +7,9 @@ app = Blueprint('main', __name__, url_prefix= '/')
 
 @app.route('/')
 def index():
+    jwt = f.obtener_jwt()
+    if jwt != None and jwt != TypeError("Token has expired"):
+        return redirect(url_for('main.index_usr'))
     pagina = request.args.get('pagina', 1, type=int) # obtener el valor de "page" de la URL
     resp = f.obtener_poemas(page=pagina)
     poemas = f.obtener_json(resp)
@@ -32,7 +35,9 @@ def index_usr(jwt = None):
 
 @app.route('/login', methods = ["GET", "POST"])
 def login():
-
+    jwt = f.obtener_jwt()
+    if jwt != None and jwt != TypeError("Token has expired"):
+        return redirect(url_for('main.index_usr'))
     if(request.method == "POST"):
 
         email = request.form.get("email")
