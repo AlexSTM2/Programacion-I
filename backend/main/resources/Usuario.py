@@ -46,12 +46,12 @@ class Usuario(Resource):
         if claims['rol'] == "admin" or id_usuario == int(id):
             
             usuario = db.session.query(ModeloUsuario).get_or_404(id)
-            usuario.nombre = request.json['nombre']
-            usuario.email = request.json['email']
-            usuario.contraseña = request.json['contraseña']
-            # data = request.get_json().items()
-            # for key, value in data:
-            #     setattr(usuario, key, value)
+            data = request.get_json().items()
+            for key, value in data:
+                if key == "contraseña":
+                    value = usuario.generate_password(contraseña=value)
+                setattr(usuario, key, value)
+            db.session.add(usuario)
             db.session.commit()
             return usuario.to_json(), 201
         else:
