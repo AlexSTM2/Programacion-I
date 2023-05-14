@@ -1,4 +1,4 @@
-<h1 align="center">How it works</h1>
+<h1 align="center">How its coded</h1>
 
 I made a Flask developed website, that uses a MYSQL database. It connects, trough an API REST in the backend, to a HTML frontend, making the requests that the user needs using the routes configured on it. 
 ![back-front](https://i.imgur.com/DxFc1Sq.png)
@@ -10,9 +10,12 @@ I made a Flask developed website, that uses a MYSQL database. It connects, troug
 Here i determine how the data is going to be stored and how the user is going to interact with it. With the resources and models of every aspect in the website, i made the requests from the frontend to the database.
 * These are the models(the resources have the same name as the models):
 ![models-resources](https://i.imgur.com/5tk4AV7.png)
-* Here is how i determine how the data is going to be stored in the database, regarding to the poems:
+
+* Here is where i determine how the data is going to be stored in the database, regarding to the poems:
 ![img](https://i.imgur.com/Et8vMl6.png/img)
+
 * From the resources, i import the models, also what i need to make the requests. I use the "flask_jwt_extended" to make the authentication of the user, and the "flask_restful" to make the requests.
+
 ![imports](https://i.imgur.com/lbfpbP3.png)
 
 ## API creation
@@ -29,7 +32,7 @@ Here i determine how the data is going to be stored and how the user is going to
 ![token](https://images-ext-1.discordapp.net/external/OKCeq265rVtkb_pIk04bJnW3m3BGWGJQpXjHwz09i5s/https/i.imgur.com/JXBCNts.png)
 
 ## Email
-* I send and email whe any of his poems is rated. I use the "flask_mail" to send the email.
+* I send and email when a poem is rated. I use the "flask_mail" to send the email.
 ![email](https://images-ext-2.discordapp.net/external/jJMGDzxOrwGJieGuWb6hNW1lRh8iGlvvkBKEmgL_xEg/https/i.imgur.com/Aq1W0pF.png)
 
 * This is the format it has:
@@ -41,7 +44,9 @@ Here i determine how the data is going to be stored and how the user is going to
 ![front-main](https://i.imgur.com/qsJvTdD.png)
 
 ## App
+
 * This is the main app, where i register the routes.
+
 ![Imgur](https://i.imgur.com/4IIZQAa.png)
 
 ## Routes
@@ -51,11 +56,13 @@ Here i determine how the data is going to be stored and how the user is going to
 
 ### Functions
 * I made a group of functions that i use in the routes, to make the code more readable. For example, this is the function that i use to get the poems from the database, using the user id:
+
 ![Imgur](https://i.imgur.com/l9JNp66.png)
 
 * There are a lots of functions like this one, because i need them to make the requests of everything to the database.
 
 ## Templates
+
 * These are all the templates i use for my poems website:
 ![Imgur](https://i.imgur.com/MfJIjwh.png)
 
@@ -63,6 +70,7 @@ Here i determine how the data is going to be stored and how the user is going to
 ![Imgur](https://i.imgur.com/MFMsYkm.png)
 
 * This is how i call the base template in the other templates:
+
 ![Imgur](https://i.imgur.com/bZfveEp.png)
 
 ## Static
