@@ -23,9 +23,10 @@ def index_usr(jwt = None):
     if jwt == None:
         jwt = f.obtener_jwt()  
     if jwt != None and jwt != TypeError("Token has expired"):
+        pagina = request.args.get('pagina', 1, type=int) # obtener el valor de "page" de la URL
         usuario = f.obtener_usuario(f.obtener_id())
         usuario = f.obtener_json(usuario)
-        resp = f.obtener_poemas()
+        resp = f.obtener_poemas(page=pagina)
         poemas = f.obtener_json(resp)
         lista_poemas = poemas["Poemas"]
         paginacion = f.paginacion(poemas["Páginas"])
