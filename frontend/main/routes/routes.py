@@ -201,7 +201,8 @@ def calificar(id_poema):
             
             elif poema["Autor"] == usuario["Nombre"]:
                 return render_template('calificar.html', usuario = usuario, poema=poema, error = "No puedes calificar tu propio poema")
-            
+            elif puntaje == "" or comentario == "":
+                return render_template('calificar.html', usuario = usuario, poema=poema, error = "Debes llenar todos los campos para calificar")
             if response.ok:
                 resp = make_response(redirect(url_for('main.index_usr')))
                 return resp
